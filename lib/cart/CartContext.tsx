@@ -29,8 +29,6 @@ export type CartLine = { product: Product; quantity: number };
 
 type CartContextValue = {
   lines: CartLine[];
-  /** 서로 다른 상품 종류 수 */
-  count: number;
   /** 수량까지 합친 총 개수 */
   totalQuantity: number;
   totalPrice: number;
@@ -95,7 +93,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     return {
       lines,
-      count: lines.length,
       totalQuantity: lines.reduce((acc, line) => acc + line.quantity, 0),
       totalPrice: lines.reduce(
         (acc, line) => acc + effectivePrice(line.product) * line.quantity,

@@ -17,6 +17,12 @@ import {
   validateBuild,
   type BuildSlots,
 } from '@/lib/builder/compatibility';
+import {
+  SHARE_PARAM,
+  decodeBuild,
+  decodeLegacyQuery,
+  encodeBuild,
+} from '@/lib/builder/shareLink';
 import { getPartsBySlot, getProduct } from '@/lib/shop/catalog';
 import { formatPrice } from '@/lib/shop/format';
 import type { PartSlot } from '@/lib/shop/types';
@@ -31,22 +37,11 @@ import styles from './Builder.module.css';
  * 그대로 저장 요청의 입력으로 쓸 수 있어 버려지는 코드가 아니다.
  */
 
-/**
- * 공유 링크의 쿼리를 견적 구성으로 되돌린다.
- *
- * slug 는 URL 로 들어오는 값이라 신뢰하지 않는다. 카탈로그에 있고 그 슬롯에
- * 맞는 부품일 때만 받아들인다. 아니면 조용히 무시한다 — 링크 하나가 틀렸다고
- * 견적짜기 화면 전체가 죽으면 안 된다.
- */
+/** 공유 링크의 쿼리를 견적 구성으로 되돌린다. 새 토큰 형식을 먼저 보고, 없으면 옛 형식을 읽는다 */
 function restoreFromQuery(searchParams: ReadonlyURLSearchParams): BuildSlots {
-  const restored: BuildSlots = {};
-  for (const slot of SLOT_ORDER) {
-    const slug = searchParams.get(slot);
-    if (!slug) continue;
-    const product = getProduct(slug);
-    if (product && product.categorySlug === slot) restored[slot] = product;
-  }
-  return restored;
+  const token = searchParams.get(SHARE_PARAM);
+  if (token) return decodeBuild(token);
+  return decodeLegacyQuery(new URLSearchParams(searchParams.toString()));
 }
 
 export default function Builder() {
@@ -93,12 +88,8 @@ export default function Builder() {
   }
 
   async function handleShare() {
-    const query = new URLSearchParams();
-    for (const slot of SLOT_ORDER) {
-      const product = build[slot];
-      if (product) query.set(slot, product.slug);
-    }
-    const url = `${window.location.origin}${window.location.pathname}?${query.toString()}`;
+    const token = encodeBuild(build);
+    const url = `${window.location.origin}${window.location.pathname}?${SHARE_PARAM}=${token}`;
 
     try {
       await navigator.clipboard.writeText(url);

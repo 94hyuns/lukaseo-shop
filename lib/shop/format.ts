@@ -12,11 +12,6 @@ export function formatPrice(amount: number): string {
   return `${WON.format(amount)}원`;
 }
 
-/** 원화 기호가 필요 없는 자리(합계표 등)에서 쓴다 */
-export function formatNumber(value: number): string {
-  return WON.format(value);
-}
-
 /**
  * 상품 카드에 노출할 스펙 뱃지 문자열.
  * 설계문서 3-2에서 "상품 카드에 CPU/GPU 스펙 노출"을 이 사이트의 정체성으로 잡았다.
