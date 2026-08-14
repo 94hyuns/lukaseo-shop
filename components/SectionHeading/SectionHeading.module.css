@@ -1,0 +1,30 @@
+.wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+}
+
+.description {
+  margin-top: var(--space-xs);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.more {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-default);
+}
+
+.more:hover {
+  color: var(--color-primary);
+}

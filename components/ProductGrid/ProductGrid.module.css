@@ -1,0 +1,33 @@
+/* 4 → 2 → 1 컬럼. auto-fill 대신 명시적 분기를 쓴 이유는
+   카드 최소 너비를 넘겨도 3열처럼 어중간한 배치가 나오지 않게 하기 위해서다 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.grid > li {
+  display: flex;
+}
+
+.grid > li > * {
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.empty {
+  padding: var(--space-2xl) 0;
+  color: var(--color-text-muted);
+  text-align: center;
+}

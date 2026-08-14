@@ -1,0 +1,99 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.quantityRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.quantityLabel {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  overflow: hidden;
+}
+
+.stepper button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: none;
+  font-size: var(--font-size-md);
+  line-height: 1;
+}
+
+.stepper button:hover {
+  background: var(--color-surface);
+}
+
+.stepper input {
+  width: 48px;
+  height: 32px;
+  border: 0;
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+  background: none;
+  text-align: center;
+  font-size: var(--font-size-sm);
+  /* 브라우저 기본 스피너는 폭을 흔들어 정렬을 깬다 */
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.stepper input::-webkit-outer-spin-button,
+.stepper input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.stock {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.button {
+  padding: var(--space-md);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  transition: filter var(--transition-default);
+}
+
+.button:hover {
+  filter: brightness(1.15);
+}
+
+.buttonDisabled {
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.buttonDisabled:hover {
+  filter: none;
+}
+
+/* 문구가 나타났다 사라져도 레이아웃이 흔들리지 않도록 높이를 잡아 둔다 */
+.feedback {
+  min-height: 1.5em;
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+}
+
+.feedback a {
+  text-decoration: underline;
+}

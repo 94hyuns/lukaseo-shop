@@ -1,0 +1,41 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.originalRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  line-height: 1.2;
+}
+
+.rate {
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.original {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.price {
+  color: var(--color-accent);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  line-height: var(--line-height-tight);
+  /* 숫자 폭이 흔들리면 카드가 줄줄이 어긋나 보인다 */
+  font-variant-numeric: tabular-nums;
+}
+
+.wrapLg .price {
+  font-size: var(--font-size-2xl);
+}
+
+.wrapLg .rate,
+.wrapLg .original {
+  font-size: var(--font-size-md);
+}

@@ -1,0 +1,66 @@
+/* 전역 디자인 토큰 — 모든 컴포넌트는 이 값만 참조한다.
+   포트폴리오(lukaseo.com)와 같은 팔레트를 쓴다. 두 사이트가 한 사람의 것으로 보여야 한다. */
+:root {
+  /* 컬러 — 다크 베이스 */
+  --color-bg: #0d0d12;
+  --color-surface: #16161d;
+  --color-surface-2: #1e1e28;
+  --color-border: #2a2a35;
+  --color-text: #f2f2f5;
+  /* 어두운 배경에서 본문으로 읽히도록 기존 #8b8b9a 보다 밝게 잡았다 */
+  --color-text-muted: #a3a3b4;
+
+  --color-primary: #4f8cff;
+  --color-accent: #00e5a0;
+  --color-danger: #ff4d6d;
+  --color-warning: #ffb020;
+
+  /* 상태색의 흐린 배경. 경고 배너처럼 넓은 면을 채울 때 원색을 쓰면 눈이 아프다 */
+  --color-danger-soft: rgba(255, 77, 109, 0.12);
+  --color-warning-soft: rgba(255, 176, 32, 0.12);
+  --color-accent-soft: rgba(0, 229, 160, 0.12);
+  --color-primary-soft: rgba(79, 140, 255, 0.12);
+
+  /* 타이포그래피 */
+  --font-base: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR', sans-serif;
+  --font-mono: 'JetBrains Mono', 'D2Coding', monospace;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  /* 한글은 14px에서 가독성이 떨어져 본문 기준을 15px로 잡았다 */
+  --font-size-body: 0.9375rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 3rem;
+
+  /* 한글 본문은 영문보다 행간이 넓어야 읽힌다 */
+  --line-height-body: 1.75;
+  --line-height-tight: 1.4;
+
+  /* 간격 */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+
+  /* 형태 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.4);
+  --transition-default: 0.2s ease;
+
+  /* 레이아웃 — 상품 그리드가 4열로 펴져야 해서 포트폴리오(1200)보다 넓게 잡았다 */
+  --container-max: 1440px;
+  --header-height: 64px;
+}
+
+/* breakpoint 참고값
+   mobile  : < 768px
+   tablet  : 768px ~ 1024px
+   desktop : > 1024px  */

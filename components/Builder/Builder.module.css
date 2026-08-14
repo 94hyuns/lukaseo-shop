@@ -1,0 +1,167 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  align-items: start;
+  gap: var(--space-xl);
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+
+/* 검사 결과는 부품을 고르는 내내 보여야 한다. 스크롤을 따라 붙여 둔다 */
+.panel {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-md));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.panelBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.panelTitle {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.summary {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.summaryRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+}
+
+.summaryRow:last-child {
+  border-bottom: 0;
+}
+
+.summaryRow dt {
+  color: var(--color-text-muted);
+}
+
+.summaryRow dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.summaryTotal {
+  background: var(--color-surface-2);
+}
+
+.summaryTotal dt {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.summaryTotal dd {
+  color: var(--color-accent);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+}
+
+.missing {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.primaryButton {
+  padding: var(--space-md);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  transition: filter var(--transition-default);
+}
+
+.primaryButton:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+
+.primaryButton:disabled {
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.subActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-sm);
+}
+
+.subButton {
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  transition: border-color var(--transition-default), color var(--transition-default);
+}
+
+.subButton:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.subButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.cartLink {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  text-align: center;
+}
+
+.cartLink:hover {
+  color: var(--color-primary);
+}
+
+@media (max-width: 1200px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .slots {
+    grid-template-columns: 1fr;
+  }
+
+  .subActions {
+    grid-template-columns: 1fr;
+  }
+}
