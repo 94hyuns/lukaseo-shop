@@ -1,3 +1,4 @@
+import rawPriceOverrides from '../../data/price-overrides.json';
 import type { Category, PartSlot, Product } from './types';
 
 /**
@@ -965,6 +966,30 @@ export const PRODUCTS: Product[] = [
     spec: { kind: 'generic', highlights: ['무선 2.4GHz', '배터리 60시간', '블루투스 동시 연결'] },
   },
 ];
+
+/* ──────────────────────── 가격 갱신 반영 (빌드 타임) ──────────────────────── */
+
+/**
+ * `npm run price-sync` 가 엑셀을 검증해 만든 승인분(data/price-overrides.json)을
+ * 카탈로그 위에 덮어쓴다. 코드의 리터럴 값은 초기값이고, 실제 판매가의 원천은
+ * 엑셀이다 — 매일 수기 입력하는 현행 업무를 그대로 흡수하는 구조 (설계문서 8장).
+ * DB 가 붙으면 이 병합은 서버의 반영 단계로 옮겨간다.
+ */
+type PriceOverride = { price?: number; salePrice?: number | null; stock?: number };
+
+const PRICE_OVERRIDES = rawPriceOverrides as Record<string, PriceOverride>;
+
+for (const product of PRODUCTS) {
+  const override = PRICE_OVERRIDES[product.slug];
+  if (!override) continue;
+  if (override.price !== undefined) product.price = override.price;
+  // 엑셀에서 할인가 칸을 비우면 "할인 없음"이다. undefined(키 없음)와 구분한다
+  if (override.salePrice !== undefined) product.salePrice = override.salePrice ?? undefined;
+  if (override.stock !== undefined) {
+    product.stock = override.stock;
+    product.status = override.stock > 0 ? 'active' : 'soldout';
+  }
+}
 
 /* ────────────────────────────── 조회 함수 ────────────────────────────── */
 

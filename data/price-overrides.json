@@ -1,0 +1,22 @@
+{
+  "samsung-990pro-2tb": {
+    "price": 249000,
+    "salePrice": 224000,
+    "stock": 30
+  },
+  "intel-i5-14400f": {
+    "price": 249000,
+    "salePrice": 228000,
+    "stock": 40
+  },
+  "msi-rtx5080-gaming-trio": {
+    "price": 1990000,
+    "salePrice": null,
+    "stock": 4
+  },
+  "lg-27gs60f": {
+    "price": 289000,
+    "salePrice": 259000,
+    "stock": 16
+  }
+}

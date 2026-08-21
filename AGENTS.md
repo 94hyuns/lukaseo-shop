@@ -10,6 +10,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - 금액은 **원 단위 정수**로만 다룬다. `NUMERIC`/`FLOAT` 금지.
 - 한글 타이포그래피 조정값(본문 15px, 행간 1.75, `word-break: keep-all`)은 의도적인 값이니 되돌리지 말 것.
 - 카드 전체 클릭은 **stretched link**(`::after` inset 0)로 구현한다. 카드를 `<a>`로 감싸지 않는다.
-- 작업 후 반드시 `npm run build`와 `npx eslint .`를 통과시킨다.
+- 작업 후 반드시 `npm run build`, `npx eslint .`, `npm test`를 통과시킨다.
+- 상품 가격·재고를 손볼 때는 `lib/shop/catalog.ts` 리터럴이 아니라 `data/prices.xlsx` → `npm run price-sync` 경로를 쓴다. overrides(`data/price-overrides.json`)가 리터럴을 덮어쓴다.
 
 전체 설계는 `lukaseo-web` 스킬의 `references/design-doc.md`를 참고한다.

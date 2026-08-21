@@ -6,7 +6,13 @@ import PriceDisplay from '@/components/PriceDisplay';
 import ReviewList from '@/components/ReviewList';
 import SectionHeading from '@/components/SectionHeading';
 import SpecBadge from '@/components/SpecBadge';
-import { getCategory, getProduct, getProductParams, getProductsByCategory } from '@/lib/shop/catalog';
+import {
+  effectivePrice,
+  getCategory,
+  getProduct,
+  getProductParams,
+  getProductsByCategory,
+} from '@/lib/shop/catalog';
 import { specTable } from '@/lib/shop/format';
 import { getReviewsByProduct } from '@/lib/shop/reviews';
 import { SLOT_ORDER } from '@/lib/builder/compatibility';
@@ -48,8 +54,35 @@ export default async function ProductDetailPage({ params }: Props) {
     .filter((item) => item.slug !== product.slug)
     .slice(0, 4);
 
+  // 검색엔진용 구조화 데이터. 값은 전부 우리 카탈로그 상수라 안전하지만,
+  // 관례대로 < 를 이스케이프해 스크립트 태그 탈출을 원천 차단한다
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.shortDesc,
+    sku: product.sku,
+    brand: { '@type': 'Brand', name: product.brand },
+    offers: {
+      '@type': 'Offer',
+      url: `https://shop.lukaseo.com/products/${product.slug}/`,
+      priceCurrency: 'KRW',
+      price: effectivePrice(product),
+      availability:
+        product.status === 'soldout'
+          ? 'https://schema.org/OutOfStock'
+          : 'https://schema.org/InStock',
+    },
+  };
+
   return (
     <div className={styles.container}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replaceAll('<', '\\u003c'),
+        }}
+      />
       <nav className={styles.breadcrumb} aria-label="위치">
         <Link href="/products">전체 상품</Link>
         {category && (
