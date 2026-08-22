@@ -1,0 +1,12 @@
+{
+  // Cloudflare Workers 배포 설정. GitHub 연동 빌드가 이 파일을 읽는다.
+  //   빌드 명령: npm run build   → out/ 생성
+  //   배포 명령: npx wrangler deploy
+  "name": "lukaseo-shop",
+  "compatibility_date": "2026-08-21",
+  "assets": {
+    // next build (output: 'export') 산출물
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
