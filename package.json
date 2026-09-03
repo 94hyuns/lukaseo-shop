@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "price-sync": "tsx scripts/price-sync.ts",
-    "price-sync:hcell": "tsx scripts/price-sync-hcell.ts"
+    "price-sync:hcell": "tsx scripts/price-sync-hcell.ts",
+    "import-catalog:hcell": "tsx scripts/import-catalog-hcell.ts"
   },
   "dependencies": {
     "next": "16.2.12",

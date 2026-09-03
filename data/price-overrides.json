@@ -1,22 +1,422 @@
 {
+  "cpu-ryzen7-9850x3d": {
+    "price": 734870,
+    "salePrice": null
+  },
+  "cpu-ryzen7-9800x3d": {
+    "price": 700280,
+    "salePrice": null
+  },
+  "cpu-ryzen9-9950x3d2": {
+    "price": 1431000,
+    "salePrice": null
+  },
+  "cpu-ryzen9-9950x3d": {
+    "price": 1069500,
+    "salePrice": null
+  },
+  "cpu-ryzen9-9900x3d": {
+    "price": 846990,
+    "salePrice": null
+  },
+  "cpu-ryzen7-7800x3d": {
+    "price": 481870,
+    "salePrice": null
+  },
+  "cpu-ryzen9-7950x3d": {
+    "price": 711130,
+    "salePrice": null
+  },
+  "cpu-ryzen5-7500x3d": {
+    "price": 321600,
+    "salePrice": null
+  },
+  "cpu-core-ultra7-270k": {
+    "price": 516790,
+    "salePrice": null
+  },
   "amd-ryzen7-9700x": {
     "price": 403180,
+    "salePrice": null
+  },
+  "cpu-ryzen9-9950x": {
+    "price": 845990,
+    "salePrice": null
+  },
+  "cpu-ryzen9-9900x": {
+    "price": 692160,
+    "salePrice": null
+  },
+  "cpu-ryzen5-9600x": {
+    "price": 268590,
+    "salePrice": null
+  },
+  "cpu-corei9-14900ks-ddr5": {
+    "price": 1000000,
+    "salePrice": null
+  },
+  "cpu-corei9-14900k-ddr5": {
+    "price": 878860,
+    "salePrice": null
+  },
+  "cpu-corei9-14900kf-ddr5": {
+    "price": 753290,
+    "salePrice": null
+  },
+  "cpu-corei9-14900-ddr5": {
+    "price": 929890,
+    "salePrice": null
+  },
+  "cpu-corei9-14900f-ddr5": {
+    "price": 887910,
+    "salePrice": null
+  },
+  "cpu-corei9-13900k-ddr5": {
+    "price": 732520,
+    "salePrice": null
+  },
+  "cpu-corei9-13900kf-ddr5": {
+    "price": 544830,
+    "salePrice": null
+  },
+  "cpu-ryzen5-9600": {
+    "price": 265000,
     "salePrice": null
   },
   "intel-i7-14700k": {
     "price": 580340,
     "salePrice": null
   },
+  "cpu-corei7-14700kf-ddr5": {
+    "price": 530370,
+    "salePrice": null
+  },
+  "cpu-corei7-13700k-ddr5": {
+    "price": 605060,
+    "salePrice": null
+  },
+  "cpu-corei7-13700kf-ddr5": {
+    "price": 401390,
+    "salePrice": null
+  },
+  "cpu-corei7-14700-ddr5": {
+    "price": 583990,
+    "salePrice": null
+  },
+  "cpu-corei7-14700f-ddr5": {
+    "price": 550140,
+    "salePrice": null
+  },
+  "cpu-core-ultra9-285k": {
+    "price": 917660,
+    "salePrice": null
+  },
+  "cpu-corei9-13900-ddr5": {
+    "price": 720530,
+    "salePrice": null
+  },
+  "cpu-corei9-13900f-ddr5": {
+    "price": 852440,
+    "salePrice": null
+  },
+  "cpu-ryzen5-9500f": {
+    "price": 245000,
+    "salePrice": null
+  },
+  "cpu-core-ultra9-285": {
+    "price": 770970,
+    "salePrice": null
+  },
+  "cpu-ryzen7-5800x3d": {
+    "price": 600780,
+    "salePrice": null
+  },
+  "cpu-corei7-13700-ddr5": {
+    "price": 610990,
+    "salePrice": null
+  },
+  "cpu-corei7-13700f-ddr5": {
+    "price": 438560,
+    "salePrice": null
+  },
+  "cpu-core-ultra5-250k": {
+    "price": 356990,
+    "salePrice": null
+  },
+  "cpu-core-ultra7-265k": {
+    "price": 424250,
+    "salePrice": null
+  },
+  "cpu-core-ultra7-265kf": {
+    "price": 425010,
+    "salePrice": null
+  },
+  "cpu-core-ultra7-265": {
+    "price": 623990,
+    "salePrice": null
+  },
+  "cpu-core-ultra7-265f": {
+    "price": 522000,
+    "salePrice": null
+  },
+  "cpu-ryzen7-7700x3d": {
+    "price": 386330,
+    "salePrice": null
+  },
+  "cpu-ryzen9-7900x": {
+    "price": 437410,
+    "salePrice": null
+  },
+  "cpu-ryzen7-7700x": {
+    "price": 365000,
+    "salePrice": null
+  },
+  "cpu-corei9-12900k-ddr5": {
+    "price": 643070,
+    "salePrice": null
+  },
+  "cpu-corei9-12900kf-ddr5": {
+    "price": 229,
+    "salePrice": null
+  },
+  "cpu-ryzen9-7900": {
+    "price": 478000,
+    "salePrice": null
+  },
+  "cpu-corei9-12900-ddr5": {
+    "price": 679900,
+    "salePrice": null
+  },
+  "cpu-ryzen7-7700": {
+    "price": 347870,
+    "salePrice": null
+  },
+  "cpu-ryzen5-7600x": {
+    "price": 342060,
+    "salePrice": null
+  },
+  "cpu-corei5-14600k-ddr5": {
+    "price": 416880,
+    "salePrice": null
+  },
+  "cpu-corei5-14600kf-ddr5": {
+    "price": 378170,
+    "salePrice": null
+  },
+  "cpu-corei5-14600-ddr5": {
+    "price": 364290,
+    "salePrice": null
+  },
+  "cpu-corei5-13600k-ddr5": {
+    "price": 374020,
+    "salePrice": null
+  },
+  "cpu-corei5-13600kf-ddr5": {
+    "price": 358200,
+    "salePrice": null
+  },
+  "cpu-core-ultra5-245k": {
+    "price": 335520,
+    "salePrice": null
+  },
+  "cpu-core-ultra5-245kf": {
+    "price": 295350,
+    "salePrice": null
+  },
+  "cpu-core-ultra5-235": {
+    "price": 447250,
+    "salePrice": null
+  },
   "amd-ryzen5-7600": {
     "price": 289000,
+    "salePrice": null
+  },
+  "cpu-corei7-12700k-ddr5": {
+    "price": 410180,
+    "salePrice": null
+  },
+  "cpu-corei7-12700kf-ddr5": {
+    "price": 332190,
+    "salePrice": null
+  },
+  "cpu-corei7-12700-ddr5": {
+    "price": 443690,
+    "salePrice": null
+  },
+  "cpu-corei7-12700f-ddr5": {
+    "price": 413340,
+    "salePrice": null
+  },
+  "cpu-ryzen5-7500f": {
+    "price": 175960,
+    "salePrice": null
+  },
+  "cpu-core-ultra5-225": {
+    "price": 306000,
+    "salePrice": null
+  },
+  "cpu-core-ultra5-225f": {
+    "price": 219990,
+    "salePrice": null
+  },
+  "cpu-corei5-13600-ddr5": {
+    "price": 363440,
+    "salePrice": null
+  },
+  "cpu-corei5-14500-ddr5": {
+    "price": 387960,
+    "salePrice": null
+  },
+  "cpu-ryzen5-7400f": {
+    "price": 172420,
+    "salePrice": null
+  },
+  "cpu-corei5-13500-ddr5": {
+    "price": 352040,
+    "salePrice": null
+  },
+  "cpu-core-ultra5-250kf": {
+    "price": 299575,
+    "salePrice": null
+  },
+  "cpu-corei5-13600k-ddr4": {
+    "price": 358200,
+    "salePrice": null
+  },
+  "cpu-corei5-12600k-ddr4": {
+    "price": 330000,
+    "salePrice": null
+  },
+  "cpu-corei5-12600kf-ddr4": {
+    "price": 279880,
+    "salePrice": null
+  },
+  "cpu-corei5-14400-ddr4": {
+    "price": 337460,
     "salePrice": null
   },
   "intel-i5-14400f": {
     "price": 241090,
     "salePrice": null
   },
+  "cpu-corei5-13400-ddr4": {
+    "price": 352590,
+    "salePrice": null
+  },
+  "cpu-corei5-13400f-ddr4": {
+    "price": 218950,
+    "salePrice": null
+  },
+  "cpu-ryzen7-8700g": {
+    "price": 413890,
+    "salePrice": null
+  },
+  "cpu-ryzen7-8700f": {
+    "price": 225450,
+    "salePrice": null
+  },
+  "cpu-ryzen5-8600g": {
+    "price": 269700,
+    "salePrice": null
+  },
+  "cpu-corei5-12500-ddr4": {
+    "price": 372800,
+    "salePrice": null
+  },
+  "cpu-corei5-12400-ddr4": {
+    "price": 292770,
+    "salePrice": null
+  },
+  "cpu-corei5-12400f-ddr4": {
+    "price": 195000,
+    "salePrice": null
+  },
   "amd-ryzen5-5600": {
     "price": 164990,
+    "salePrice": null
+  },
+  "cpu-ryzen5-8500g": {
+    "price": 235000,
+    "salePrice": null
+  },
+  "cpu-ryzen5-8400f": {
+    "price": 176180,
+    "salePrice": null
+  },
+  "cpu-corei3-14100-ddr4": {
+    "price": 190500,
+    "salePrice": null
+  },
+  "cpu-corei3-14100f-ddr4": {
+    "price": 172260,
+    "salePrice": null
+  },
+  "cpu-corei3-13100-ddr4": {
+    "price": 241000,
+    "salePrice": null
+  },
+  "cpu-corei3-13100f-ddr4": {
+    "price": 177990,
+    "salePrice": null
+  },
+  "cpu-corei3-12100-ddr4": {
+    "price": 193620,
+    "salePrice": null
+  },
+  "cpu-corei3-12100f-ddr4": {
+    "price": 159600,
+    "salePrice": null
+  },
+  "cpu-ryzen7-5700g": {
+    "price": 323990,
+    "salePrice": null
+  },
+  "cpu-ryzen5-5600gt": {
+    "price": 206500,
+    "salePrice": null
+  },
+  "cpu-ryzen5-5600g": {
+    "price": 215200,
+    "salePrice": null
+  },
+  "cpu-ryzen5-5500gt": {
+    "price": 195910,
+    "salePrice": null
+  },
+  "cpu-corei3-10105": {
+    "price": 154560,
+    "salePrice": null
+  },
+  "cpu-corei3-10105f": {
+    "price": 106880,
+    "salePrice": null
+  },
+  "cpu-corei3-10100": {
+    "price": 159890,
+    "salePrice": null
+  },
+  "cpu-corei3-10100f": {
+    "price": 102000,
+    "salePrice": null
+  },
+  "cpu-ryzen3-5300g": {
+    "price": 178670,
+    "salePrice": null
+  },
+  "cpu-300-ddr4": {
+    "price": 166500,
+    "salePrice": null
+  },
+  "cpu-g6400": {
+    "price": 72700,
+    "salePrice": null
+  },
+  "cpu-g5905": {
+    "price": 54700,
+    "salePrice": null
+  },
+  "cpu-g5900": {
+    "price": 89680,
     "salePrice": null
   }
 }

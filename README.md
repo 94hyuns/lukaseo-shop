@@ -26,12 +26,15 @@
 ```bash
 npm test          # vitest — 호환성 엔진·공유 링크·가격 검증 33개
 npm run price-sync  # data/prices.xlsx 검증 → 승인분만 카탈로그에 반영
-npm run price-sync:hcell -- "<CPU 비교표.xlsx 경로>"  # 한셀로 관리하는 실물 비교표용 수집기
+npm run import-catalog:hcell -- "<CPU 비교표.xlsx 경로>"  # 비교표 → CPU 상품 마스터 생성 (신규 품목 추가)
+npm run price-sync:hcell -- "<CPU 비교표.xlsx 경로>"      # 기존 품목 가격만 검증 거쳐 갱신
 ```
 
-실물 비교표(한셀 저장)는 exceljs·SheetJS 가 모두 읽지 못해 zip·XML을 직접 파싱하며,
-SKU 컬럼이 없어 상품명 ↔ SKU 수동 매핑표(`scripts/price-sync-hcell.ts`)로 잇습니다.
-비교표 파일 자체는 저장소에 커밋하지 않습니다.
+**CPU 카테고리는 실물 비교표(엑셀)가 상품 마스터입니다.** 임포트가 data/catalog-cpu.json 을
+만들고 카탈로그가 이를 읽습니다. 조립 스펙(소켓·TDP)은 비교표에 없어 lib/shop/cpu-specs.ts 의
+수동 보강표에서 얹으며, **보강된 모델만 견적짜기에 나타납니다** — 스펙 없이 호환성을 판정할 수는
+없기 때문입니다. 한셀 저장 파일은 exceljs·SheetJS 가 모두 읽지 못해 zip·XML을 직접 파싱합니다
+(lib/price-sync/hcell.ts). 비교표 파일 자체는 저장소에 커밋하지 않습니다.
 
 ---
 

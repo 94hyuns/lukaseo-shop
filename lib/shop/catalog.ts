@@ -1,4 +1,5 @@
 import rawPriceOverrides from '../../data/price-overrides.json';
+import { buildCpuProducts } from './cpu-catalog';
 import type { Category, PartSlot, Product } from './types';
 
 /**
@@ -25,7 +26,7 @@ export const CATEGORIES: Category[] = [
     slug: 'cpu',
     name: 'CPU',
     group: 'part',
-    description: '인텔·AMD 프로세서. 메인보드 소켓이 맞아야 장착됩니다.',
+    description: '인텔·AMD 프로세서. 실물 비교표에서 가져온 목록이며, 조립 스펙이 등록된 모델만 견적짜기에 나타납니다.',
   },
   {
     slug: 'mainboard',
@@ -83,7 +84,7 @@ export const CATEGORIES: Category[] = [
   },
 ];
 
-export const PRODUCTS: Product[] = [
+const HAND_PRODUCTS: Product[] = [
   // ─────────────────────────────── 완제품 PC
   {
     slug: 'lx-starter-4060',
@@ -189,128 +190,6 @@ export const PRODUCTS: Product[] = [
       gpu: 'RTX 5070 12GB',
       ram: 'DDR5 32GB',
       storage: 'NVMe 2TB',
-    },
-  },
-
-  // ─────────────────────────────── CPU
-  {
-    slug: 'intel-i5-14400f',
-    sku: 'CPU-INT-14400F',
-    name: '인텔 코어 i5-14400F',
-    brand: 'Intel',
-    categorySlug: 'cpu',
-    price: 249000,
-    salePrice: 228000,
-    stock: 40,
-    status: 'active',
-    shortDesc: '10코어 16스레드. 가격 대비 게임 성능이 가장 무난한 선택입니다.',
-    description:
-      '게임 위주로 쓴다면 이 급에서 더 올릴 이유가 크지 않습니다. 내장 그래픽이 없는 F 모델이라 그래픽카드가 반드시 필요합니다.',
-    spec: {
-      kind: 'cpu',
-      socket: 'LGA1700',
-      cores: 10,
-      threads: 16,
-      baseClock: '2.5GHz',
-      tdp: 65,
-      tier: 6,
-      igpu: false,
-    },
-    badges: ['인기'],
-  },
-  {
-    slug: 'intel-i7-14700k',
-    sku: 'CPU-INT-14700K',
-    name: '인텔 코어 i7-14700K',
-    brand: 'Intel',
-    categorySlug: 'cpu',
-    price: 549000,
-    stock: 18,
-    status: 'active',
-    shortDesc: '20코어 28스레드. 게임과 작업을 함께 하는 구성용입니다.',
-    description:
-      '배수 잠금이 풀린 K 모델이라 오버클럭이 가능합니다. 대신 발열이 큽니다 — 기본 쿨러로는 감당이 안 되니 별도 쿨러를 반드시 함께 고르세요.',
-    spec: {
-      kind: 'cpu',
-      socket: 'LGA1700',
-      cores: 20,
-      threads: 28,
-      baseClock: '3.4GHz',
-      tdp: 125,
-      tier: 8,
-      igpu: true,
-    },
-  },
-  {
-    slug: 'amd-ryzen5-7600',
-    sku: 'CPU-AMD-7600',
-    name: 'AMD 라이젠5 7600',
-    brand: 'AMD',
-    categorySlug: 'cpu',
-    price: 259000,
-    salePrice: 239000,
-    stock: 25,
-    status: 'active',
-    shortDesc: '6코어 12스레드. 65W라 쿨링 부담이 적습니다.',
-    description:
-      'AM5 소켓의 입문 라인입니다. 소켓 수명이 길어 나중에 CPU만 갈아끼우는 업그레이드가 가능합니다. DDR5 전용이라 메모리를 함께 맞춰야 합니다.',
-    spec: {
-      kind: 'cpu',
-      socket: 'AM5',
-      cores: 6,
-      threads: 12,
-      baseClock: '3.8GHz',
-      tdp: 65,
-      tier: 6,
-      igpu: true,
-    },
-  },
-  {
-    slug: 'amd-ryzen7-9700x',
-    sku: 'CPU-AMD-9700X',
-    name: 'AMD 라이젠7 9700X',
-    brand: 'AMD',
-    categorySlug: 'cpu',
-    price: 519000,
-    stock: 11,
-    status: 'active',
-    shortDesc: '8코어 16스레드를 65W로 돌립니다. 전력 효율이 강점입니다.',
-    description:
-      '같은 성능대의 인텔 대비 소비전력이 절반 수준입니다. 파워와 쿨러 예산을 아낄 수 있어 전체 견적으로 보면 차이가 줄어듭니다.',
-    spec: {
-      kind: 'cpu',
-      socket: 'AM5',
-      cores: 8,
-      threads: 16,
-      baseClock: '3.8GHz',
-      tdp: 65,
-      tier: 8,
-      igpu: true,
-    },
-    badges: ['신제품'],
-  },
-  {
-    slug: 'amd-ryzen5-5600',
-    sku: 'CPU-AMD-5600',
-    name: 'AMD 라이젠5 5600',
-    brand: 'AMD',
-    categorySlug: 'cpu',
-    price: 129000,
-    salePrice: 112000,
-    stock: 33,
-    status: 'active',
-    shortDesc: '구형 AM4 플랫폼. 최소 예산 구성에 씁니다.',
-    description:
-      '단종 수순인 AM4 소켓이라 업그레이드 여지는 없지만, 가격이 내려갈 대로 내려가 최소 예산 구성에서는 여전히 선택지입니다. DDR4 메인보드와 묶어야 합니다.',
-    spec: {
-      kind: 'cpu',
-      socket: 'AM4',
-      cores: 6,
-      threads: 12,
-      baseClock: '3.5GHz',
-      tdp: 65,
-      tier: 4,
-      igpu: false,
     },
   },
 
@@ -955,6 +834,12 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
+/**
+ * CPU 는 실물 비교표(엑셀)가 원본이다 — data/catalog-cpu.json 에서 생성한다.
+ * 나머지 카테고리는 아직 손으로 관리하는 목데이터.
+ */
+export const PRODUCTS: Product[] = [...HAND_PRODUCTS, ...buildCpuProducts()];
+
 /* ──────────────────────── 가격 갱신 반영 (빌드 타임) ──────────────────────── */
 
 /**
@@ -1014,7 +899,11 @@ export function getCategoriesByGroup(group: Category['group']): Category[] {
  */
 export function getPartsBySlot(slot: PartSlot): Product[] {
   return PRODUCTS.filter(
-    (product) => product.categorySlug === slot && product.status === 'active',
+    (product) =>
+      product.categorySlug === slot &&
+      product.status === 'active' &&
+      // 조립 스펙이 보강된 부품만. 스펙 없이 '호환성 문제 없음'이라고 말할 수는 없다
+      product.spec.kind === slot,
   );
 }
 
