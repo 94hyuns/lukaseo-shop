@@ -65,6 +65,17 @@
   filter: brightness(1.12);
 }
 
+/* 관리자는 공개 데모임을 알리는 보조 메뉴 — 견적짜기(주력)보다 한 단계 낮게 */
+.navLinkAdmin {
+  padding: 4px var(--space-md);
+  border: 1px solid var(--color-band-border);
+  border-radius: 999px;
+}
+
+.navLinkAdmin:hover {
+  border-color: var(--color-band-muted);
+}
+
 .search {
   display: flex;
   align-items: center;

@@ -54,6 +54,15 @@ export default function Header() {
           >
             견적짜기
           </Link>
+          {/* 포트폴리오 데모라 관리자도 메뉴에 공개한다 */}
+          <Link
+            href="/admin"
+            className={`${styles.navLink} ${styles.navLinkAdmin} ${
+              pathname.startsWith('/admin') ? styles.navLinkActive : ''
+            }`}
+          >
+            관리자
+          </Link>
         </nav>
 
         <form className={styles.search} onSubmit={handleSearch} role="search">
