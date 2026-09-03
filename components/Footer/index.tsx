@@ -27,7 +27,7 @@ export default function Footer() {
             <Link href="/products">전체 상품</Link>
             <Link href="/builder">견적짜기</Link>
             <Link href="/cart">장바구니</Link>
-            <Link href="/admin/price-sync">가격 갱신 리포트 (관리자 데모)</Link>
+            <Link href="/admin">관리자 (공개 데모)</Link>
           </nav>
 
           <div className={styles.linkColumn}>

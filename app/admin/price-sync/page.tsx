@@ -13,10 +13,9 @@ import styles from './price-sync.module.css';
  * 서버가 붙으면 배선만 한다 (설계문서 8-4).
  */
 
+// robots(noindex)는 관리자 레이아웃이 일괄 적용한다
 export const metadata: Metadata = {
-  title: '가격 갱신 리포트 (관리자 데모)',
-  // 데모지만 관리자 화면을 검색엔진에 노출할 이유는 없다
-  robots: { index: false, follow: false },
+  title: '가격 갱신 리포트',
 };
 
 type Report = {
@@ -60,7 +59,6 @@ export default function PriceSyncReportPage() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <p className={styles.eyebrow}>관리자 데모 — 읽기 전용</p>
         <h1 className={styles.title}>가격 갱신 리포트</h1>
         <p className={styles.description}>
           <code className={styles.code}>npm run price-sync</code> 가 <code className={styles.code}>data/prices.xlsx</code>

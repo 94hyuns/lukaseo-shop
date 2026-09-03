@@ -1,0 +1,159 @@
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-lg) var(--space-2xl);
+}
+
+.title {
+  margin-bottom: var(--space-lg);
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  line-height: var(--line-height-tight);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.statLabel {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.statValue {
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: var(--line-height-tight);
+}
+
+.statSub {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.statLink {
+  color: var(--color-primary);
+}
+
+.section {
+  margin-bottom: var(--space-xl);
+}
+
+.sectionTitle {
+  margin-bottom: var(--space-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.tableWrap {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface);
+  font-size: var(--font-size-sm);
+}
+
+.table th {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.rowLink {
+  font-weight: 600;
+}
+
+.rowLink:hover {
+  color: var(--color-primary);
+}
+
+.number {
+  font-variant-numeric: tabular-nums;
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+.flow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.flowNode {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.flowArrow {
+  color: var(--color-text-muted);
+}
+
+.flowNote {
+  max-width: 720px;
+  margin-top: var(--space-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.flowNote a {
+  color: var(--color-primary);
+}
+
+@media (max-width: 1024px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-md) var(--space-md) var(--space-xl);
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
