@@ -1,22 +1,22 @@
 {
-  "samsung-990pro-2tb": {
-    "price": 249000,
-    "salePrice": 224000,
-    "stock": 30
+  "amd-ryzen7-9700x": {
+    "price": 403180,
+    "salePrice": null
+  },
+  "intel-i7-14700k": {
+    "price": 580340,
+    "salePrice": null
+  },
+  "amd-ryzen5-7600": {
+    "price": 289000,
+    "salePrice": null
   },
   "intel-i5-14400f": {
-    "price": 249000,
-    "salePrice": 228000,
-    "stock": 40
+    "price": 241090,
+    "salePrice": null
   },
-  "msi-rtx5080-gaming-trio": {
-    "price": 1990000,
-    "salePrice": null,
-    "stock": 4
-  },
-  "lg-27gs60f": {
-    "price": 289000,
-    "salePrice": 259000,
-    "stock": 16
+  "amd-ryzen5-5600": {
+    "price": 164990,
+    "salePrice": null
   }
 }

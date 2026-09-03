@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getProduct } from '@/lib/shop/catalog';
+import { effectivePrice, getProduct } from '@/lib/shop/catalog';
 import type { Product } from '@/lib/shop/types';
 import {
   missingSlots,
@@ -203,12 +203,11 @@ describe('집계 함수', () => {
     expect(recommendedWattage({})).toBe(0);
   });
 
-  it('totalPrice — 할인가가 있으면 할인가로 합산', () => {
-    const build: BuildSlots = {
-      cpu: part('intel-i5-14400f'), // 할인 228,000
-      gpu: part('gigabyte-rtx4060-eagle'), // 할인 389,000
-    };
-    expect(totalPrice(build)).toBe(228000 + 389000);
+  it('totalPrice — 실판매가(effectivePrice) 기준으로 합산', () => {
+    // 가격 리터럴을 박지 않는다 — 가격의 원천은 엑셀이라 갱신될 때마다 바뀐다
+    const cpu = part('intel-i5-14400f');
+    const gpu = part('gigabyte-rtx4060-eagle');
+    expect(totalPrice({ cpu, gpu })).toBe(effectivePrice(cpu) + effectivePrice(gpu));
   });
 
   it('missingSlots — 그래픽카드는 필수가 아니다 (내장 그래픽 경로)', () => {

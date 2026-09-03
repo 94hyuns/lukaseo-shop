@@ -1,14 +1,9 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ExcelJS from 'exceljs';
 import { PRODUCTS } from '../lib/shop/catalog';
-import {
-  DEFAULT_CHANGE_THRESHOLD,
-  validateRows,
-  type PriceRow,
-  type SyncItem,
-} from '../lib/price-sync/validate';
+import { printSummary, writeSyncOutputs } from '../lib/price-sync/output';
+import { validateRows, type PriceRow } from '../lib/price-sync/validate';
 
 /**
  * 엑셀 가격 갱신 (설계문서 8-4의 빌드 타임 축소판).
@@ -82,54 +77,12 @@ async function readRows(): Promise<PriceRow[]> {
   return rows;
 }
 
-function buildOverrides(items: SyncItem[]) {
-  const overrides: Record<string, { price?: number; salePrice?: number | null; stock?: number }> = {};
-  for (const item of items) {
-    if (item.verdict !== 'ok' || !item.productSlug) continue;
-    overrides[item.productSlug] = {
-      price: item.newPrice ?? undefined,
-      // 엑셀에서 할인가 칸이 비면 "할인 없음"(null). 키 자체를 빼지 않는 이유는
-      // 기존 할인을 지우는 것도 갱신이기 때문
-      salePrice: item.newSalePrice,
-      ...(item.newStock !== null ? { stock: item.newStock } : {}),
-    };
-  }
-  return overrides;
-}
-
 async function main() {
   const rows = await readRows();
   const result = validateRows(rows, PRODUCTS);
 
-  fs.writeFileSync(
-    path.join(rootDir, 'data', 'price-overrides.json'),
-    JSON.stringify(buildOverrides(result.items), null, 2) + '\n',
-  );
-
-  fs.writeFileSync(
-    path.join(rootDir, 'data', 'price-sync-report.json'),
-    JSON.stringify(
-      {
-        runAt: new Date().toISOString(),
-        source: 'excel',
-        file: path.basename(excelFile),
-        changeThreshold: DEFAULT_CHANGE_THRESHOLD,
-        counts: result.counts,
-        items: result.items,
-      },
-      null,
-      2,
-    ) + '\n',
-  );
-
-  const { counts } = result;
-  console.log(`검증 완료 — 총 ${counts.total}행: 반영 ${counts.ok} · 보류 ${counts.held} · 거부 ${counts.rejected}`);
-  for (const item of result.items) {
-    if (item.verdict === 'ok') continue;
-    const label = item.verdict === 'held' ? '보류' : '거부';
-    console.log(`  [${label}] ${item.sourceLabel} ${item.sku} — ${item.reason}`);
-  }
-  console.log('data/price-overrides.json, data/price-sync-report.json 갱신됨');
+  writeSyncOutputs(rootDir, 'excel', path.basename(excelFile), result);
+  printSummary(result);
 }
 
 main().catch((error) => {

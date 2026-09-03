@@ -26,7 +26,12 @@
 ```bash
 npm test          # vitest — 호환성 엔진·공유 링크·가격 검증 33개
 npm run price-sync  # data/prices.xlsx 검증 → 승인분만 카탈로그에 반영
+npm run price-sync:hcell -- "<CPU 비교표.xlsx 경로>"  # 한셀로 관리하는 실물 비교표용 수집기
 ```
+
+실물 비교표(한셀 저장)는 exceljs·SheetJS 가 모두 읽지 못해 zip·XML을 직접 파싱하며,
+SKU 컬럼이 없어 상품명 ↔ SKU 수동 매핑표(`scripts/price-sync-hcell.ts`)로 잇습니다.
+비교표 파일 자체는 저장소에 커밋하지 않습니다.
 
 ---
 
