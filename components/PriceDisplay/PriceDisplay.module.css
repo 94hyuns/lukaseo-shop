@@ -1,20 +1,11 @@
 .wrap {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
-.originalRow {
-  display: flex;
+.wrapCenter {
   align-items: center;
-  gap: var(--space-xs);
-  line-height: 1.2;
-}
-
-.rate {
-  color: var(--color-danger);
-  font-size: var(--font-size-sm);
-  font-weight: 700;
 }
 
 .original {
@@ -22,11 +13,24 @@
   font-size: var(--font-size-xs);
 }
 
-.price {
-  color: var(--color-accent);
-  font-size: var(--font-size-lg);
-  font-weight: 700;
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
   line-height: var(--line-height-tight);
+}
+
+.rate {
+  color: var(--color-price);
+  font-size: var(--font-size-sm);
+  font-weight: 800;
+}
+
+/* 국내 커머스 관례 — 가격은 빨갛고 굵어야 가격으로 읽힌다 */
+.price {
+  color: var(--color-price);
+  font-size: var(--font-size-lg);
+  font-weight: 800;
   /* 숫자 폭이 흔들리면 카드가 줄줄이 어긋나 보인다 */
   font-variant-numeric: tabular-nums;
 }
@@ -35,7 +39,10 @@
   font-size: var(--font-size-2xl);
 }
 
-.wrapLg .rate,
-.wrapLg .original {
+.wrapLg .rate {
   font-size: var(--font-size-md);
+}
+
+.wrapLg .original {
+  font-size: var(--font-size-sm);
 }

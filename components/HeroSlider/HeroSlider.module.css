@@ -1,5 +1,6 @@
+/* 히어로는 레퍼런스처럼 유일하게 다크가 허용되는 띠다 */
 .hero {
-  border-bottom: 1px solid var(--color-border);
+  color: var(--color-band-text);
   transition: background 0.6s ease;
 }
 
@@ -7,11 +8,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: var(--space-xl);
+  gap: var(--space-lg);
   max-width: var(--container-max);
-  min-height: 380px;
+  min-height: 300px;
   margin: 0 auto;
-  padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+  padding: var(--space-xl) var(--space-lg) var(--space-lg);
 }
 
 .content {
@@ -34,9 +35,9 @@
   display: inline-block;
   margin-bottom: var(--space-md);
   padding: 2px var(--space-sm);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  color: var(--color-accent);
+  border: 1px solid var(--color-band-border);
+  border-radius: 2px;
+  color: #4ade9f;
   font-size: var(--font-size-xs);
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -50,7 +51,7 @@
 
 .description {
   margin-top: var(--space-md);
-  color: var(--color-text-muted);
+  color: var(--color-band-muted);
 }
 
 .cta {
@@ -80,15 +81,16 @@
   place-items: center;
   width: 28px;
   height: 28px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-band-border);
   border-radius: 50%;
-  background: var(--color-surface);
+  background: transparent;
+  color: var(--color-band-text);
   font-size: 10px;
   line-height: 1;
 }
 
 .playButton:hover {
-  border-color: var(--color-primary);
+  border-color: var(--color-band-muted);
 }
 
 .dots {
@@ -102,12 +104,12 @@
   padding: 0;
   border: 0;
   border-radius: 2px;
-  background: var(--color-border);
+  background: var(--color-band-border);
   transition: background var(--transition-default);
 }
 
 .dot:hover {
-  background: var(--color-text-muted);
+  background: var(--color-band-muted);
 }
 
 .dotActive {
@@ -115,15 +117,15 @@
 }
 
 .counter {
-  color: var(--color-text-muted);
+  color: var(--color-band-muted);
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
 }
 
 @media (max-width: 768px) {
   .inner {
-    min-height: 320px;
-    padding: var(--space-xl) var(--space-md);
+    min-height: 260px;
+    padding: var(--space-lg) var(--space-md);
   }
 
   .title {

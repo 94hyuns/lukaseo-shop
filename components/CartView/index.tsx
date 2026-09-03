@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import PartIllustration from '@/components/PartIllustration';
 import SpecBadge from '@/components/SpecBadge';
 import { useCart } from '@/lib/cart/CartContext';
-import { effectivePrice, getCategory } from '@/lib/shop/catalog';
+import { effectivePrice } from '@/lib/shop/catalog';
 import { featuredSpecs, formatPrice } from '@/lib/shop/format';
 import styles from './CartView.module.css';
 
@@ -50,13 +51,12 @@ export default function CartView() {
 
         <ul className={styles.list}>
           {lines.map(({ product, quantity }) => {
-            const category = getCategory(product.categorySlug);
             const unit = effectivePrice(product);
 
             return (
               <li key={product.slug} className={styles.item}>
                 <div className={styles.thumb} aria-hidden="true">
-                  {category?.icon ?? '📦'}
+                  <PartIllustration slug={product.categorySlug} className={styles.thumbArt} />
                 </div>
 
                 <div className={styles.info}>

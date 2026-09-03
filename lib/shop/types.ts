@@ -166,8 +166,6 @@ export type Product = {
 export type Category = {
   slug: string;
   name: string;
-  /** 카테고리 그리드에 쓰는 이모지. 아이콘 스프라이트가 생기면 교체한다 */
-  icon: string;
   group: 'system' | 'part' | 'peripheral';
   description: string;
 };

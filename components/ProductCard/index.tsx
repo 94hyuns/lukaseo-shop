@@ -1,36 +1,33 @@
 import Link from 'next/link';
+import PartIllustration from '@/components/PartIllustration';
 import PriceDisplay from '@/components/PriceDisplay';
 import SpecBadge from '@/components/SpecBadge';
-import { getCategory } from '@/lib/shop/catalog';
 import { featuredSpecs } from '@/lib/shop/format';
 import type { Product } from '@/lib/shop/types';
 import styles from './ProductCard.module.css';
 
 /** 카드에 뱃지를 다 늘어놓으면 무엇이 중요한지 안 보인다 */
-const MAX_SPECS = 4;
+const MAX_SPECS = 3;
 
 export default function ProductCard({ product }: { product: Product }) {
-  const category = getCategory(product.categorySlug);
   const specs = featuredSpecs(product.spec).slice(0, MAX_SPECS);
   const soldout = product.status === 'soldout';
 
   return (
     <article className={`${styles.card} ${soldout ? styles.cardSoldout : ''}`}>
-      {/* 실제 상품 이미지가 들어올 자리. 지금은 카테고리 아이콘으로 대신한다 */}
+      {/* 실제 상품 사진이 들어올 자리. 지금은 직접 그린 라인아트로 대신한다 */}
       <div className={styles.thumb} aria-hidden="true">
-        <span className={styles.thumbIcon}>{category?.icon ?? '📦'}</span>
+        <PartIllustration slug={product.categorySlug} className={styles.thumbArt} />
+        {product.badges?.map((badge) => (
+          <span key={badge} className={styles.badge}>
+            {badge}
+          </span>
+        ))}
         {soldout && <span className={styles.soldoutTag}>품절</span>}
       </div>
 
       <div className={styles.body}>
-        <div className={styles.brandRow}>
-          <span className={styles.brand}>{product.brand}</span>
-          {product.badges?.map((badge) => (
-            <span key={badge} className={styles.badge}>
-              {badge}
-            </span>
-          ))}
-        </div>
+        <span className={styles.brand}>{product.brand}</span>
 
         <h3 className={styles.name}>
           {/* 카드 전체를 <a> 로 감싸면 내부 링크가 중첩 앵커가 된다.
@@ -49,7 +46,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </ul>
 
         <div className={styles.footer}>
-          <PriceDisplay product={product} />
+          <PriceDisplay product={product} align="center" />
         </div>
       </div>
     </article>

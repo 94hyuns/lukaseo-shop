@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import PartIllustration from '@/components/PartIllustration';
 import ProductBrowser from '@/components/ProductBrowser';
 import { getCategory, getCategoryParams, getProductsByCategory } from '@/lib/shop/catalog';
 import styles from './category.module.css';
@@ -34,7 +35,7 @@ export default async function CategoryPage({ params }: Props) {
     <div className={styles.container}>
       <header className={styles.header}>
         <span className={styles.icon} aria-hidden="true">
-          {category.icon}
+          <PartIllustration slug={category.slug} className={styles.iconArt} />
         </span>
         <div>
           <h1 className={styles.title}>{category.name}</h1>

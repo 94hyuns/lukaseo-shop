@@ -1,47 +1,68 @@
+/* 레퍼런스(오버시스템)처럼 테두리 없이 이미지가 주인공인 카드.
+   구분은 선이 아니라 여백과 정렬이 한다 */
 .card {
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
   background: var(--color-surface);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  transition: border-color var(--transition-default), transform var(--transition-default);
+  transition: box-shadow var(--transition-default);
 }
 
 .card:hover {
-  border-color: var(--color-primary);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(20, 20, 32, 0.12);
 }
 
 .cardSoldout {
-  opacity: 0.55;
-}
-
-.cardSoldout:hover {
-  transform: none;
+  opacity: 0.5;
 }
 
 .thumb {
   position: relative;
   display: grid;
   place-items: center;
-  aspect-ratio: 4 / 3;
-  background: linear-gradient(140deg, var(--color-surface-2), var(--color-bg));
-  border-bottom: 1px solid var(--color-border);
+  aspect-ratio: 1 / 1;
+  background: var(--color-surface);
+  padding: var(--space-lg);
 }
 
-.thumbIcon {
-  font-size: 2.5rem;
-  opacity: 0.5;
+.thumbArt {
+  width: 70%;
+  height: 70%;
+  color: #b9b9c6;
+  transition: color var(--transition-default), transform var(--transition-default);
+}
+
+.card:hover .thumbArt {
+  color: var(--color-primary);
+  transform: scale(1.04);
+}
+
+.badge {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  padding: 1px 7px;
+  border-radius: 2px;
+  background: var(--color-price);
+  color: #fff;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+/* 뱃지가 여러 개면 겹치지 않게 차례로 내린다 */
+.badge:nth-of-type(2) {
+  top: calc(var(--space-sm) + 24px);
+  background: var(--color-primary);
 }
 
 .soldoutTag {
   position: absolute;
   inset: auto var(--space-sm) var(--space-sm) auto;
   padding: 2px var(--space-sm);
-  border-radius: var(--radius-sm);
-  background: var(--color-danger);
+  border-radius: 2px;
+  background: var(--color-text);
   color: #fff;
   font-size: var(--font-size-xs);
   font-weight: 700;
@@ -51,15 +72,10 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: var(--space-sm);
-  padding: var(--space-md);
-}
-
-.brandRow {
-  display: flex;
   align-items: center;
   gap: var(--space-xs);
-  flex-wrap: wrap;
+  padding: 0 var(--space-md) var(--space-lg);
+  text-align: center;
 }
 
 .brand {
@@ -68,18 +84,9 @@
   letter-spacing: 0.04em;
 }
 
-.badge {
-  padding: 1px 6px;
-  border-radius: var(--radius-sm);
-  background: var(--color-primary-soft);
-  color: var(--color-primary);
-  font-size: var(--font-size-xs);
-  font-weight: 700;
-}
-
 .name {
   font-size: var(--font-size-md);
-  font-weight: 600;
+  font-weight: 700;
   line-height: var(--line-height-tight);
 }
 
@@ -92,7 +99,9 @@
 .specs {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: var(--space-xs);
+  margin-top: var(--space-xs);
 }
 
 .footer {

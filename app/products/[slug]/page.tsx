@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import AddToCartButton from '@/components/AddToCartButton';
+import PartIllustration from '@/components/PartIllustration';
 import PriceDisplay from '@/components/PriceDisplay';
 import ReviewList from '@/components/ReviewList';
 import SectionHeading from '@/components/SectionHeading';
@@ -95,7 +96,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
       <div className={styles.top}>
         <div className={styles.gallery} aria-hidden="true">
-          <span className={styles.galleryIcon}>{category?.icon ?? '📦'}</span>
+          <PartIllustration slug={product.categorySlug} className={styles.galleryArt} />
           <p className={styles.galleryNote}>상품 이미지가 들어갈 자리입니다</p>
         </div>
 
