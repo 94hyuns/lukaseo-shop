@@ -80,6 +80,11 @@ export default function Header() {
             <span className={styles.cartCount}>{totalQuantity}</span>
           )}
         </Link>
+
+        {/* 이 사이트는 포트폴리오의 일부다. 허브로 돌아가는 길을 항상 열어 둔다 */}
+        <a href="https://lukaseo.com" className={styles.portfolioLink}>
+          포트폴리오 ↗
+        </a>
       </div>
     </header>
   );

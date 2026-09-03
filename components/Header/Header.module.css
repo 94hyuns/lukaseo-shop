@@ -123,6 +123,22 @@
   line-height: 1;
 }
 
+.portfolioLink {
+  flex-shrink: 0;
+  padding: 3px var(--space-sm);
+  border: 1px solid var(--color-band-border);
+  border-radius: 999px;
+  color: var(--color-band-muted);
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  transition: color var(--transition-default), border-color var(--transition-default);
+}
+
+.portfolioLink:hover {
+  border-color: var(--color-band-muted);
+  color: var(--color-band-text);
+}
+
 .srOnly {
   position: absolute;
   width: 1px;
