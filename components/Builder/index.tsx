@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams, type ReadonlyURLSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, type ReadonlyURLSearchParams } from 'next/navigation';
 import BuilderSlot from '@/components/BuilderSlot';
 import CompatibilityAlert from '@/components/CompatibilityAlert';
 import { useCart } from '@/lib/cart/CartContext';
@@ -23,6 +23,8 @@ import {
   decodeLegacyQuery,
   encodeBuild,
 } from '@/lib/builder/shareLink';
+import { saveBuild } from '@/lib/builder/savedBuilds';
+import { useSession } from '@/lib/auth/useSession';
 import { getPartsBySlot, getProduct } from '@/lib/shop/catalog';
 import { formatPrice } from '@/lib/shop/format';
 import type { PartSlot } from '@/lib/shop/types';
@@ -51,6 +53,9 @@ export default function Builder() {
   // URL 은 내보내기(공유 링크) 전용이다.
   const [build, setBuild] = useState<BuildSlots>(() => restoreFromQuery(searchParams));
   const [copied, setCopied] = useState(false);
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'failed'>('idle');
+  const { session } = useSession();
+  const router = useRouter();
 
   const issues = useMemo(() => validateBuild(build), [build]);
   const { hasError } = summarize(issues);
@@ -85,6 +90,19 @@ export default function Builder() {
       delete next[slot];
       return next;
     });
+  }
+
+  /** 로그인 상태면 DB 에 저장, 아니면 로그인 화면으로 보낸다 */
+  async function handleSave() {
+    if (!session) {
+      router.push('/account');
+      return;
+    }
+    setSaveState('saving');
+    const name = `견적 ${new Date().toLocaleDateString('ko-KR')}`;
+    const ok = await saveBuild(name, build);
+    setSaveState(ok ? 'saved' : 'failed');
+    window.setTimeout(() => setSaveState('idle'), 2500);
   }
 
   async function handleShare() {
@@ -170,6 +188,22 @@ export default function Builder() {
               disabled={selectedSlugs.length === 0}
             >
               {copied ? '링크를 복사했습니다' : '견적 링크 복사'}
+            </button>
+            <button
+              type="button"
+              className={styles.subButton}
+              onClick={handleSave}
+              disabled={selectedSlugs.length === 0 || saveState === 'saving'}
+            >
+              {saveState === 'saving'
+                ? '저장 중…'
+                : saveState === 'saved'
+                  ? '내 계정에 저장됨'
+                  : saveState === 'failed'
+                    ? '저장 실패 — 다시 시도'
+                    : session
+                      ? '견적 저장'
+                      : '견적 저장 (로그인)'}
             </button>
             <button
               type="button"

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from '@/lib/cart/CartContext';
+import { useSession } from '@/lib/auth/useSession';
 import styles from './Header.module.css';
 
 const NAV = [
@@ -17,6 +18,7 @@ export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const { totalQuantity, isReady } = useCart();
+  const { session, isReady: sessionReady } = useSession();
   const [keyword, setKeyword] = useState('');
 
   function handleSearch(event: React.FormEvent) {
@@ -88,6 +90,14 @@ export default function Header() {
           {isReady && totalQuantity > 0 && (
             <span className={styles.cartCount}>{totalQuantity}</span>
           )}
+        </Link>
+
+        <Link
+          href="/account"
+          className={`${styles.cart} ${pathname.startsWith('/account') ? styles.navLinkActive : ''}`}
+        >
+          {/* 세션을 읽기 전에는 중립 라벨. 로그인/내 계정이 깜빡 바뀌는 걸 막는다 */}
+          {!sessionReady ? '계정' : session ? '내 계정' : '로그인'}
         </Link>
 
         {/* 이 사이트는 포트폴리오의 일부다. 허브로 돌아가는 길을 항상 열어 둔다 */}

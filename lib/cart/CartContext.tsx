@@ -11,13 +11,14 @@ import {
   subscribe,
   update,
 } from './store';
+import { useCartSync } from './useCartSync';
 
 /**
  * 장바구니 상태.
  *
  * 저장은 lib/cart/store.ts 가 맡고 여기서는 화면이 쓰기 좋은 형태로 바꿔준다.
- * 설계문서 10장 4단계에서 "비로그인 localStorage → 로그인 시 서버 장바구니로
- * 병합"으로 확장할 자리다.
+ * 로그인 시 서버 장바구니와의 병합·동기화는 useCartSync 가 맡는다
+ * (설계문서 10장 4단계).
  *
  * 저장하는 값은 slug 와 수량뿐이다. 가격을 함께 저장하면 그 값이 곧 낡고,
  * 낡은 가격으로 결제 금액을 계산하는 사고로 이어진다. 금액 스냅샷은
@@ -46,6 +47,8 @@ const CartContext = createContext<CartContextValue | null>(null);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const stored = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const isReady = useSyncExternalStore(subscribe, getHydrated, getServerHydrated);
+  // 로그인 상태면 서버 장바구니와 병합·동기화한다 (비로그인이면 아무것도 안 함)
+  useCartSync();
 
   const add = useCallback((slug: string, quantity = 1) => {
     update((prev) => {
