@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Pagination from '@/components/Pagination';
 import { CATEGORIES, PRODUCTS, effectivePrice, getCategory } from '@/lib/shop/catalog';
 import { formatPrice } from '@/lib/shop/format';
+import { applyLive, missingFromDb, useLiveOverrides } from '@/lib/shop/live';
 import { SLOT_ORDER } from '@/lib/builder/compatibility';
 import type { PartSlot, Product } from '@/lib/shop/types';
 import styles from './AdminProductTable.module.css';
@@ -30,6 +31,7 @@ export default function AdminProductTable() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { state: liveState, overrides } = useLiveOverrides();
 
   const keyword = searchParams.get('q') ?? '';
   const category = searchParams.get('category') ?? '';
@@ -48,9 +50,15 @@ export default function AdminProductTable() {
     router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
   }
 
+  // DB 실시간 값(가격·재고·상태)을 정적 카탈로그 위에 덮는다
+  const products = useMemo(
+    () => PRODUCTS.map((product) => applyLive(product, overrides)),
+    [overrides],
+  );
+
   const filtered = useMemo(() => {
     const needle = keyword.trim().toLowerCase();
-    return PRODUCTS.filter((product) => {
+    return products.filter((product) => {
       if (category && product.categorySlug !== category) return false;
       if (status && product.status !== status) return false;
       if (builder && builderState(product) !== builder) return false;
@@ -61,7 +69,7 @@ export default function AdminProductTable() {
         product.brand.toLowerCase().includes(needle)
       );
     });
-  }, [keyword, category, status, builder]);
+  }, [products, keyword, category, status, builder]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
@@ -125,6 +133,18 @@ export default function AdminProductTable() {
 
         <p className={styles.count} aria-live="polite">
           <strong>{filtered.length}</strong>개
+          <span
+            className={`${styles.source} ${liveState === 'live' ? styles.sourceLive : ''}`}
+            title={
+              liveState === 'live'
+                ? 'Supabase에서 가격·재고·상태를 실시간 조회 중'
+                : liveState === 'offline'
+                  ? 'DB에 연결하지 못해 빌드 시점 데이터를 보여줍니다'
+                  : 'DB 연결 확인 중'
+            }
+          >
+            {liveState === 'live' ? 'DB 실시간' : liveState === 'offline' ? '정적 데이터' : '연결 중…'}
+          </span>
         </p>
       </div>
 
@@ -158,13 +178,22 @@ export default function AdminProductTable() {
                   <td className={styles.number}>{formatPrice(effectivePrice(product))}</td>
                   <td className={styles.number}>{product.stock}</td>
                   <td>
-                    <span
-                      className={`${styles.badge} ${
-                        product.status === 'soldout' ? styles.badgeSoldout : styles.badgeActive
-                      }`}
-                    >
-                      {product.status === 'soldout' ? '품절' : '판매중'}
-                    </span>
+                    {missingFromDb(product, liveState, overrides) ? (
+                      <span
+                        className={`${styles.badge} ${styles.badgePlain}`}
+                        title="DB 조회 결과에 없는 상품 — 숨김 처리됐거나 아직 등록 전입니다"
+                      >
+                        DB 미등록
+                      </span>
+                    ) : (
+                      <span
+                        className={`${styles.badge} ${
+                          product.status === 'soldout' ? styles.badgeSoldout : styles.badgeActive
+                        }`}
+                      >
+                        {product.status === 'soldout' ? '품절' : '판매중'}
+                      </span>
+                    )}
                   </td>
                   <td>
                     <span

@@ -41,6 +41,21 @@
   font-variant-numeric: tabular-nums;
 }
 
+.source {
+  margin-left: var(--space-sm);
+  padding: 1px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sourceLive {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
 .tableWrap {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);

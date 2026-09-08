@@ -27,8 +27,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className={styles.bannerInner}>
           <strong>관리자 화면 — 공개 데모</strong>
           <span className={styles.bannerNote}>
-            포트폴리오라 인증 없이 열어뒀습니다. 조회만 가능하며, 업로드·승인 같은 쓰기
-            동작은 서버(DB) 단계에서 열립니다.
+            포트폴리오라 인증 없이 열어뒀습니다. 가격·재고·상태는 Supabase DB를 실시간
+            조회하며, 업로드·승인 같은 쓰기 동작은 인증·서버 API 단계에서 열립니다.
           </span>
         </div>
       </div>

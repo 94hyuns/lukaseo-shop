@@ -219,8 +219,9 @@ create index on price_history (product_id, changed_at desc);
 -- ─────────────────────────────── RLS (4-3)
 
 alter table products enable row level security;
-create policy "상품은 누구나 조회" on products
-  for select using (status = 'active');
+-- 프론트가 품절 상품도 목록에 보여주므로 hidden 만 감춘다
+create policy "상품은 숨김 외 누구나 조회" on products
+  for select using (status <> 'hidden');
 
 alter table categories enable row level security;
 create policy "카테고리는 누구나 조회" on categories

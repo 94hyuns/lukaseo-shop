@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# 공개 값(Supabase URL·publishable 키)만 담으므로 커밋한다 — 비밀키 금지
+!.env
 
 # vercel
 .vercel

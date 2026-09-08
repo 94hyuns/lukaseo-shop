@@ -11,6 +11,31 @@
   line-height: var(--line-height-tight);
 }
 
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+
+.titleRow .title {
+  margin-bottom: var(--space-lg);
+}
+
+.liveBadge {
+  padding: 1px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.liveBadgeOn {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
