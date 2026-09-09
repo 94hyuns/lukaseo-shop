@@ -42,6 +42,21 @@
   font-size: var(--font-size-xs);
 }
 
+.delete {
+  padding: 1px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+}
+
+.delete:hover {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
 .product {
   color: var(--color-text-muted);
   font-size: var(--font-size-xs);

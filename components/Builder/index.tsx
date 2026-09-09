@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams, type ReadonlyURLSearchParams } from 'next/navigation';
 import BuilderSlot from '@/components/BuilderSlot';
@@ -23,7 +23,7 @@ import {
   decodeLegacyQuery,
   encodeBuild,
 } from '@/lib/builder/shareLink';
-import { saveBuild } from '@/lib/builder/savedBuilds';
+import { fetchSharedBuild, saveBuild } from '@/lib/builder/savedBuilds';
 import { useSession } from '@/lib/auth/useSession';
 import { getPartsBySlot, getProduct } from '@/lib/shop/catalog';
 import { formatPrice } from '@/lib/shop/format';
@@ -56,6 +56,28 @@ export default function Builder() {
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'saved' | 'failed'>('idle');
   const { session } = useSession();
   const router = useRouter();
+
+  // DB 공유 링크(?build=토큰)는 조회가 비동기라 마운트 후 한 번 불러온다.
+  // 토큰이 깨졌거나 비공개로 바뀌었으면 조용히 빈 견적으로 남긴다.
+  const sharedToken = searchParams.get('build');
+  useEffect(() => {
+    if (!sharedToken) return;
+    let cancelled = false;
+    fetchSharedBuild(sharedToken).then((slots) => {
+      if (cancelled || !slots) return;
+      const restored: BuildSlots = {};
+      for (const [slot, slug] of Object.entries(slots)) {
+        const product = getProduct(slug);
+        if (product && product.categorySlug === slot) {
+          restored[slot as PartSlot] = product;
+        }
+      }
+      if (Object.keys(restored).length > 0) setBuild(restored);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [sharedToken]);
 
   const issues = useMemo(() => validateBuild(build), [build]);
   const { hasError } = summarize(issues);

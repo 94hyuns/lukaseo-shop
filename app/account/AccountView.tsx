@@ -7,11 +7,14 @@ import { getSupabase } from '@/lib/shop/supabaseClient';
 import {
   deleteBuild,
   listMyBuilds,
+  shareBuild,
   type SavedBuild,
 } from '@/lib/builder/savedBuilds';
 import { SHARE_PARAM, encodeBuild } from '@/lib/builder/shareLink';
 import { SLOT_LABELS, SLOT_ORDER, type BuildSlots } from '@/lib/builder/compatibility';
 import { getProduct } from '@/lib/shop/catalog';
+import { formatPrice } from '@/lib/shop/format';
+import { listMyOrders, ORDER_STATUS_LABELS, type MyOrder } from '@/lib/shop/orders';
 import styles from './account.module.css';
 
 /**
@@ -141,6 +144,7 @@ function AuthForm() {
 function SavedBuilds() {
   const [builds, setBuilds] = useState<SavedBuild[] | null>(null);
   const [failed, setFailed] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const reload = useCallback(() => {
     listMyBuilds().then((result) => {
@@ -153,6 +157,21 @@ function SavedBuilds() {
 
   async function handleDelete(id: string) {
     if (await deleteBuild(id)) reload();
+  }
+
+  /** 견적을 공개로 전환하고 공유 URL 을 클립보드에 복사한다 */
+  async function handleShare(build: SavedBuild) {
+    const token = await shareBuild(build.id, build.shareToken);
+    if (!token) return;
+    const url = `${window.location.origin}/builder/?build=${token}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // 클립보드가 막힌 환경 — 링크 발급 자체는 됐으니 상태만 갱신한다
+    }
+    setCopiedId(build.id);
+    window.setTimeout(() => setCopiedId(null), 2500);
+    if (!build.shareToken) reload();
   }
 
   if (failed) return <p className={styles.muted}>저장된 견적을 불러오지 못했습니다.</p>;
@@ -189,6 +208,17 @@ function SavedBuilds() {
               </Link>
               <button
                 type="button"
+                className={styles.buildShare}
+                onClick={() => handleShare(build)}
+              >
+                {copiedId === build.id
+                  ? '링크 복사됨'
+                  : build.shareToken
+                    ? '공유 링크 복사'
+                    : '공유하기'}
+              </button>
+              <button
+                type="button"
                 className={styles.buildDelete}
                 onClick={() => handleDelete(build.id)}
               >
@@ -198,6 +228,44 @@ function SavedBuilds() {
           </li>
         );
       })}
+    </ul>
+  );
+}
+
+function MyOrders() {
+  const [orders, setOrders] = useState<MyOrder[] | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    listMyOrders().then((result) => {
+      if (result === null) setFailed(true);
+      else setOrders(result);
+    });
+  }, []);
+
+  if (failed) return <p className={styles.muted}>주문 내역을 불러오지 못했습니다.</p>;
+  if (orders === null) return <p className={styles.muted}>불러오는 중…</p>;
+  if (orders.length === 0) {
+    return (
+      <p className={styles.muted}>
+        아직 주문이 없습니다. 결제 기능은 다음 단계에서 열립니다 — 주문이 생기면 여기에
+        번호·상태·금액이 표시됩니다.
+      </p>
+    );
+  }
+
+  return (
+    <ul className={styles.orderList}>
+      {orders.map((order) => (
+        <li key={order.orderNo} className={styles.orderItem}>
+          <span className={styles.orderNo}>{order.orderNo}</span>
+          <span className={styles.orderStatus}>
+            {ORDER_STATUS_LABELS[order.status] ?? order.status}
+          </span>
+          <span className={styles.orderAmount}>{formatPrice(order.totalAmount)}</span>
+          <span className={styles.orderDate}>{order.createdAt}</span>
+        </li>
+      ))}
     </ul>
   );
 }
@@ -235,6 +303,11 @@ export default function AccountView() {
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>저장된 견적</h2>
             <SavedBuilds />
+          </section>
+
+          <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>주문 내역</h2>
+            <MyOrders />
           </section>
 
           <section className={styles.section}>

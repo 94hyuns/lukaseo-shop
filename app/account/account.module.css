@@ -213,6 +213,22 @@
   color: var(--color-primary);
 }
 
+.buildShare {
+  padding: 2px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.buildShare:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
 .buildDelete {
   padding: 2px 8px;
   border: 1px solid var(--color-border);
@@ -226,4 +242,55 @@
 .buildDelete:hover {
   border-color: var(--color-danger);
   color: var(--color-danger);
+}
+
+/* ── 주문 내역 ── */
+
+.orderList {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.orderItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+}
+
+.orderItem:last-child {
+  border-bottom: 0;
+}
+
+.orderNo {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+}
+
+.orderStatus {
+  padding: 1px 8px;
+  border-radius: 2px;
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.orderAmount {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.orderDate {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
 }

@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import AddToCartButton from '@/components/AddToCartButton';
 import PartIllustration from '@/components/PartIllustration';
 import PriceDisplay from '@/components/PriceDisplay';
-import ReviewList from '@/components/ReviewList';
+import ProductReviews from '@/components/ProductReviews';
 import SectionHeading from '@/components/SectionHeading';
 import SpecBadge from '@/components/SpecBadge';
 import {
@@ -147,10 +147,8 @@ export default async function ProductDetailPage({ params }: Props) {
         <p className={styles.description}>{product.description}</p>
       </section>
 
-      <section className={styles.section}>
-        <SectionHeading title={`구매후기 (${reviews.length})`} />
-        <ReviewList reviews={reviews} />
-      </section>
+      {/* DB 후기 + 시드 목데이터. 작성 폼은 로그인 시에만 열린다 */}
+      <ProductReviews slug={product.slug} seedReviews={reviews} />
 
       {related.length > 0 && (
         <section className={styles.section}>

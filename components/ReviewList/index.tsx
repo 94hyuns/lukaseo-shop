@@ -19,9 +19,17 @@ type Props = {
   reviews: Review[];
   /** 후기가 어떤 상품에 달린 것인지 함께 보여줄지. 상품 상세에서는 불필요하다 */
   showProduct?: boolean;
+  /** 본인이 쓴 후기 id 목록 — 여기 든 항목에만 삭제 버튼이 붙는다 */
+  ownReviewIds?: string[];
+  onDelete?: (id: string) => void;
 };
 
-export default function ReviewList({ reviews, showProduct = false }: Props) {
+export default function ReviewList({
+  reviews,
+  showProduct = false,
+  ownReviewIds,
+  onDelete,
+}: Props) {
   if (reviews.length === 0) {
     return <p className={styles.empty}>아직 등록된 후기가 없습니다.</p>;
   }
@@ -39,6 +47,15 @@ export default function ReviewList({ reviews, showProduct = false }: Props) {
               <time className={styles.date} dateTime={review.createdAt}>
                 {review.createdAt}
               </time>
+              {onDelete && ownReviewIds?.includes(review.id) && (
+                <button
+                  type="button"
+                  className={styles.delete}
+                  onClick={() => onDelete(review.id)}
+                >
+                  삭제
+                </button>
+              )}
             </div>
 
             {product && (
