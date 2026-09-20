@@ -1,0 +1,25 @@
+# Supabase 무료 플랜은 API 요청이 1주일 없으면 프로젝트를 일시정지한다.
+# 방문자가 없는 기간에도 주 2회 가벼운 조회를 날려 잠들지 않게 한다.
+# (2026-09-20 실제로 일시정지를 겪고 추가함)
+#
+# 키는 publishable(공개용)이라 저장소에 그대로 둬도 된다 — .env 와 같은 값.
+name: supabase-keepalive
+
+on:
+  schedule:
+    # 월·목 12:23 KST (03:23 UTC). 정각을 피하는 건 GitHub cron 혼잡 회피 관례
+    - cron: '23 3 * * 1,4'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: sb_publishable_NwKOYAlASPiHLkxkAyFHvg_U52Sv9K_" \
+            "https://myhejnplnywasrtpdotj.supabase.co/rest/v1/products?select=slug&limit=1")
+          echo "HTTP $code"
+          # 200 이 아니면 실패로 표시해 이메일 알림이 오게 한다 (일시정지 감지 겸용)
+          test "$code" = "200"
