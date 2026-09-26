@@ -241,14 +241,20 @@
 }
 
 .checkout {
+  display: block;
   padding: var(--space-md);
   border: 0;
   border-radius: var(--radius-sm);
-  background: var(--color-surface-2);
-  color: var(--color-text-muted);
+  background: var(--color-primary);
+  color: #fff;
   font-size: var(--font-size-md);
   font-weight: 700;
-  cursor: not-allowed;
+  text-align: center;
+  cursor: pointer;
+}
+
+.checkout:hover {
+  opacity: 0.92;
 }
 
 .checkoutNote {

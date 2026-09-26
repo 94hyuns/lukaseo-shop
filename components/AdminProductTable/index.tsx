@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Pagination from '@/components/Pagination';
+import { updateProductRow, useIsAdmin } from '@/lib/shop/adminApi';
 import { CATEGORIES, PRODUCTS, effectivePrice, getCategory } from '@/lib/shop/catalog';
 import { formatPrice } from '@/lib/shop/format';
 import { applyLive, missingFromDb, useLiveOverrides } from '@/lib/shop/live';
@@ -21,6 +22,15 @@ import styles from './AdminProductTable.module.css';
 
 const PAGE_SIZE = 30;
 
+/** 인라인 편집 폼 상태. 숫자 입력은 비울 수 있어 문자열로 든다 */
+type EditDraft = {
+  slug: string;
+  price: string;
+  salePrice: string;
+  stock: string;
+  status: 'active' | 'soldout' | 'hidden';
+};
+
 /** 견적짜기 노출 여부. 부품 카테고리가 아니면 해당 없음 */
 function builderState(product: Product): '노출' | '미노출' | '—' {
   if (!SLOT_ORDER.includes(product.categorySlug as PartSlot)) return '—';
@@ -31,7 +41,11 @@ export default function AdminProductTable() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { state: liveState, overrides } = useLiveOverrides();
+  const { state: liveState, overrides, refresh } = useLiveOverrides();
+  const isAdmin = useIsAdmin();
+  const [draft, setDraft] = useState<EditDraft | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(false);
 
   const keyword = searchParams.get('q') ?? '';
   const category = searchParams.get('category') ?? '';
@@ -74,6 +88,48 @@ export default function AdminProductTable() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages);
   const visible = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+  const columnCount = isAdmin ? 8 : 7;
+
+  function startEdit(slug: string) {
+    const product = products.find((item) => item.slug === slug);
+    if (!product) return;
+    setSaveError(false);
+    setDraft({
+      slug,
+      price: String(product.price),
+      salePrice: product.salePrice !== undefined ? String(product.salePrice) : '',
+      stock: String(product.stock),
+      status: overrides?.get(slug) ? overrides.get(slug)!.status : product.status,
+    });
+  }
+
+  async function saveDraft() {
+    if (!draft) return;
+    const price = Number(draft.price);
+    const salePrice = draft.salePrice.trim() === '' ? null : Number(draft.salePrice);
+    const stock = Number(draft.stock);
+    if (!Number.isInteger(price) || price < 0 || !Number.isInteger(stock) || stock < 0) return;
+    if (salePrice !== null && (!Number.isInteger(salePrice) || salePrice < 0)) return;
+
+    setSaving(true);
+    setSaveError(false);
+    const ok = await updateProductRow(draft.slug, {
+      price,
+      salePrice,
+      stock,
+      status: draft.status,
+    });
+    setSaving(false);
+    if (!ok) {
+      setSaveError(true);
+      return;
+    }
+    // 권한 없는 요청은 RLS 가 0행 갱신으로 흘려보낸다 — 버튼이 관리자에게만
+    // 보이니 UI 로는 못 오고, 우회 요청은 아무것도 못 바꾼다. 저장 후
+    // 새로 읽은 값이 곧 진실이다.
+    setDraft(null);
+    refresh();
+  }
 
   return (
     <div>
@@ -159,13 +215,16 @@ export default function AdminProductTable() {
               <th>재고</th>
               <th>상태</th>
               <th>견적짜기</th>
+              {isAdmin && <th>관리</th>}
             </tr>
           </thead>
           <tbody>
             {visible.map((product) => {
               const state = builderState(product);
+              const isEditing = draft?.slug === product.slug;
               return (
-                <tr key={product.slug}>
+                <React.Fragment key={product.slug}>
+                <tr>
                   <td className={styles.mono}>{product.sku}</td>
                   <td>
                     <Link href={`/products/${product.slug}`} className={styles.nameLink}>
@@ -208,12 +267,87 @@ export default function AdminProductTable() {
                       {state}
                     </span>
                   </td>
+                  {isAdmin && (
+                    <td>
+                      <button
+                        type="button"
+                        className={styles.editButton}
+                        onClick={() => (isEditing ? setDraft(null) : startEdit(product.slug))}
+                      >
+                        {isEditing ? '닫기' : '수정'}
+                      </button>
+                    </td>
+                  )}
                 </tr>
+                {isEditing && draft && (
+                  <tr>
+                    <td colSpan={columnCount} className={styles.editorCell}>
+                      <div className={styles.editor}>
+                        <label className={styles.editorField}>
+                          <span>정가</span>
+                          <input
+                            type="number"
+                            min={0}
+                            value={draft.price}
+                            onChange={(e) => setDraft({ ...draft, price: e.target.value })}
+                          />
+                        </label>
+                        <label className={styles.editorField}>
+                          <span>할인가 (비우면 없음)</span>
+                          <input
+                            type="number"
+                            min={0}
+                            value={draft.salePrice}
+                            onChange={(e) => setDraft({ ...draft, salePrice: e.target.value })}
+                          />
+                        </label>
+                        <label className={styles.editorField}>
+                          <span>재고</span>
+                          <input
+                            type="number"
+                            min={0}
+                            value={draft.stock}
+                            onChange={(e) => setDraft({ ...draft, stock: e.target.value })}
+                          />
+                        </label>
+                        <label className={styles.editorField}>
+                          <span>상태</span>
+                          <select
+                            value={draft.status}
+                            onChange={(e) =>
+                              setDraft({ ...draft, status: e.target.value as EditDraft['status'] })
+                            }
+                          >
+                            <option value="active">판매중</option>
+                            <option value="soldout">품절</option>
+                            <option value="hidden">숨김</option>
+                          </select>
+                        </label>
+                        <div className={styles.editorActions}>
+                          <button
+                            type="button"
+                            className={styles.editorSave}
+                            onClick={saveDraft}
+                            disabled={saving}
+                          >
+                            {saving ? '저장 중…' : 'DB에 저장'}
+                          </button>
+                          {saveError && (
+                            <span className={styles.editorError} role="alert">
+                              저장 실패 — 관리자 권한을 확인해주세요.
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                </React.Fragment>
               );
             })}
             {visible.length === 0 && (
               <tr>
-                <td colSpan={7} className={styles.empty}>
+                <td colSpan={columnCount} className={styles.empty}>
                   조건에 맞는 상품이 없습니다.
                 </td>
               </tr>

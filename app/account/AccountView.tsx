@@ -14,7 +14,14 @@ import { SHARE_PARAM, encodeBuild } from '@/lib/builder/shareLink';
 import { SLOT_LABELS, SLOT_ORDER, type BuildSlots } from '@/lib/builder/compatibility';
 import { getProduct } from '@/lib/shop/catalog';
 import { formatPrice } from '@/lib/shop/format';
-import { listMyOrders, ORDER_STATUS_LABELS, type MyOrder } from '@/lib/shop/orders';
+import {
+  fetchOrderItems,
+  listMyOrders,
+  ORDER_STATUS_LABELS,
+  type MyOrder,
+  type MyOrderItem,
+} from '@/lib/shop/orders';
+import { payOrderDemo } from '@/lib/shop/checkout';
 import styles from './account.module.css';
 
 /**
@@ -235,21 +242,45 @@ function SavedBuilds() {
 function MyOrders() {
   const [orders, setOrders] = useState<MyOrder[] | null>(null);
   const [failed, setFailed] = useState(false);
+  const [openOrderNo, setOpenOrderNo] = useState<string | null>(null);
+  const [items, setItems] = useState<Record<string, MyOrderItem[]>>({});
+  const [paying, setPaying] = useState<string | null>(null);
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     listMyOrders().then((result) => {
       if (result === null) setFailed(true);
       else setOrders(result);
     });
   }, []);
 
+  useEffect(reload, [reload]);
+
+  async function toggle(orderNo: string) {
+    if (openOrderNo === orderNo) {
+      setOpenOrderNo(null);
+      return;
+    }
+    setOpenOrderNo(orderNo);
+    if (!items[orderNo]) {
+      const rows = await fetchOrderItems(orderNo);
+      if (rows) setItems((prev) => ({ ...prev, [orderNo]: rows }));
+    }
+  }
+
+  async function handleDemoPay(orderNo: string) {
+    setPaying(orderNo);
+    const ok = await payOrderDemo(orderNo);
+    setPaying(null);
+    if (ok) reload();
+  }
+
   if (failed) return <p className={styles.muted}>주문 내역을 불러오지 못했습니다.</p>;
   if (orders === null) return <p className={styles.muted}>불러오는 중…</p>;
   if (orders.length === 0) {
     return (
       <p className={styles.muted}>
-        아직 주문이 없습니다. 결제 기능은 다음 단계에서 열립니다 — 주문이 생기면 여기에
-        번호·상태·금액이 표시됩니다.
+        아직 주문이 없습니다. <Link href="/products">상품</Link>을 장바구니에 담고
+        주문하면 여기에 번호·상태·금액이 표시됩니다.
       </p>
     );
   }
@@ -257,13 +288,50 @@ function MyOrders() {
   return (
     <ul className={styles.orderList}>
       {orders.map((order) => (
-        <li key={order.orderNo} className={styles.orderItem}>
-          <span className={styles.orderNo}>{order.orderNo}</span>
-          <span className={styles.orderStatus}>
-            {ORDER_STATUS_LABELS[order.status] ?? order.status}
-          </span>
-          <span className={styles.orderAmount}>{formatPrice(order.totalAmount)}</span>
-          <span className={styles.orderDate}>{order.createdAt}</span>
+        <li key={order.orderNo}>
+          <button
+            type="button"
+            className={styles.orderItem}
+            onClick={() => toggle(order.orderNo)}
+            aria-expanded={openOrderNo === order.orderNo}
+          >
+            <span className={styles.orderNo}>{order.orderNo}</span>
+            <span className={styles.orderStatus}>
+              {ORDER_STATUS_LABELS[order.status] ?? order.status}
+            </span>
+            <span className={styles.orderAmount}>{formatPrice(order.totalAmount)}</span>
+            <span className={styles.orderDate}>{order.createdAt}</span>
+          </button>
+
+          {openOrderNo === order.orderNo && (
+            <div className={styles.orderDetail}>
+              {items[order.orderNo] ? (
+                <ul className={styles.orderLines}>
+                  {items[order.orderNo].map((line) => (
+                    <li key={line.productName} className={styles.orderLine}>
+                      <span className={styles.orderLineName}>{line.productName}</span>
+                      <span className={styles.orderLineQty}>×{line.quantity}</span>
+                      <span className={styles.orderLineAmount}>
+                        {formatPrice(line.unitPrice * line.quantity)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className={styles.muted}>품목 불러오는 중…</p>
+              )}
+              {order.status === 'pending' && (
+                <button
+                  type="button"
+                  className={styles.orderPay}
+                  onClick={() => handleDemoPay(order.orderNo)}
+                  disabled={paying === order.orderNo}
+                >
+                  {paying === order.orderNo ? '결제 처리 중…' : '데모 결제 진행'}
+                </button>
+              )}
+            </div>
+          )}
         </li>
       ))}
     </ul>

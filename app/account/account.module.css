@@ -259,13 +259,80 @@
   display: flex;
   align-items: center;
   gap: var(--space-md);
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.orderItem:hover {
+  background: var(--color-surface-2);
+}
+
+.orderList li:last-child .orderItem {
+  border-bottom: 0;
+}
+
+.orderDetail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
   padding: var(--space-md) var(--space-lg);
   border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+}
+
+.orderLines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.orderLine {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
   font-size: var(--font-size-sm);
 }
 
-.orderItem:last-child {
-  border-bottom: 0;
+.orderLineName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orderLineQty {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.orderLineAmount {
+  font-variant-numeric: tabular-nums;
+}
+
+.orderPay {
+  align-self: flex-start;
+  padding: var(--space-xs) var(--space-md);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.orderPay:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .orderNo {

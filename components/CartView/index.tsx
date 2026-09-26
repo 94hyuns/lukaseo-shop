@@ -134,14 +134,12 @@ export default function CartView() {
           </p>
         )}
 
-        {/* 결제는 서버 검증이 전제라 뼈대 단계에서 만들지 않는다 (설계문서 5장).
-            버튼을 감추는 대신 왜 막혀 있는지 적어 둔다 */}
-        <button type="button" className={styles.checkout} disabled>
+        <Link href="/checkout" className={styles.checkout}>
           주문하기
-        </button>
+        </Link>
         <p className={styles.checkoutNote}>
-          결제는 서버에서 금액을 다시 계산해 검증해야 안전합니다. 이 데모는 정적 사이트라
-          결제 단계를 아직 열지 않았습니다.
+          최종 결제 금액은 주문 시점에 서버가 DB 가격으로 다시 계산해 확정합니다. 화면
+          금액은 예상치입니다.
         </p>
       </aside>
     </div>

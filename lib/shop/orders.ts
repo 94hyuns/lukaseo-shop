@@ -25,6 +25,30 @@ export const ORDER_STATUS_LABELS: Record<string, string> = {
   refunded: '환불됨',
 };
 
+export type MyOrderItem = {
+  productName: string;
+  unitPrice: number;
+  quantity: number;
+};
+
+/** 주문 품목(주문 시점 이름·가격 스냅샷). RLS: 본인 주문 것만 */
+export async function fetchOrderItems(orderNo: string): Promise<MyOrderItem[] | null> {
+  const supabase = getSupabase();
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from('order_items')
+    .select('product_name, unit_price, quantity')
+    .eq('order_no', orderNo);
+  if (error || !data) return null;
+
+  return data.map((row) => ({
+    productName: row.product_name as string,
+    unitPrice: row.unit_price as number,
+    quantity: row.quantity as number,
+  }));
+}
+
 export async function listMyOrders(): Promise<MyOrder[] | null> {
   const supabase = getSupabase();
   if (!supabase) return null;

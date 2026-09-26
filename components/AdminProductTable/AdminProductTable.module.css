@@ -147,3 +147,82 @@
   color: var(--color-text-muted);
   text-align: center;
 }
+
+/* ── 관리자 인라인 편집 ── */
+
+.editButton {
+  padding: 2px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.editButton:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.editorCell {
+  background: var(--color-surface-2);
+}
+
+.editor {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding: var(--space-xs) 0;
+}
+
+.editorField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.editorField span {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.editorField input,
+.editorField select {
+  width: 140px;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-size: var(--font-size-sm);
+}
+
+.editorActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.editorSave {
+  padding: var(--space-xs) var(--space-md);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.editorSave:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.editorError {
+  color: var(--color-danger);
+  font-size: var(--font-size-xs);
+}

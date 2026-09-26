@@ -8,7 +8,7 @@
  * 조회가 실패해도 화면은 그대로 뜬다 — 원래 보여주던 정적 데이터가 폴백이다.
  */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Product } from './types';
 import { fetchLiveProducts, type LiveProductRow } from './supabase';
 
@@ -17,9 +17,12 @@ export type LiveState = 'loading' | 'live' | 'offline';
 export function useLiveOverrides(): {
   state: LiveState;
   overrides: Map<string, LiveProductRow> | null;
+  /** 관리자 수정 직후처럼 최신 값을 다시 받아야 할 때 */
+  refresh: () => void;
 } {
   const [state, setState] = useState<LiveState>('loading');
   const [overrides, setOverrides] = useState<Map<string, LiveProductRow> | null>(null);
+  const [version, setVersion] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -35,9 +38,11 @@ export function useLiveOverrides(): {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [version]);
 
-  return { state, overrides };
+  const refresh = useCallback(() => setVersion((v) => v + 1), []);
+
+  return { state, overrides, refresh };
 }
 
 /**

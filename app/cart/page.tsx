@@ -13,7 +13,7 @@ export default function CartPage() {
       <header className={styles.header}>
         <h1 className={styles.title}>장바구니</h1>
         <p className={styles.description}>
-          담은 내용은 이 브라우저에만 저장됩니다. 로그인 기능이 붙으면 계정으로 옮겨집니다.
+          담은 내용은 이 브라우저에 저장되고, 로그인하면 계정에도 함께 보관됩니다.
         </p>
       </header>
 
