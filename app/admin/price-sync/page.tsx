@@ -2,20 +2,20 @@ import type { Metadata } from 'next';
 import rawReport from '@/data/price-sync-report.json';
 import { formatPrice } from '@/lib/shop/format';
 import type { SyncItem, SyncVerdict } from '@/lib/price-sync/validate';
+import PriceSyncQueue from './PriceSyncQueue';
 import styles from './price-sync.module.css';
 
 /**
- * 가격 갱신 리포트 (관리자 데모).
+ * 가격 갱신 — 업로드·승인 대기열 + 리포트 (설계문서 8-6).
  *
- * 지금은 `npm run price-sync` 가 만든 리포트 파일을 빌드 시점에 읽어 보여주는
- * 읽기 전용 화면이다. 업로드·승인 버튼이 없는 이유: 그 동작들은 쓰기와 인증이
- * 필요해서 서버(로드맵 3단계 이후)가 전제다. 화면 구조를 먼저 세워두고
- * 서버가 붙으면 배선만 한다 (설계문서 8-4).
+ * 관리자는 비교표(xlsx)를 브라우저에 올려 검증 결과를 대기열에 스테이징하고,
+ * 승인하면 ok 행이 DB 상품에 반영된다. 아래의 정적 리포트는 로컬 파이프라인
+ * (`npm run price-sync`)의 마지막 실행 기록으로, 참고용으로 남겨 둔다.
  */
 
 // robots(noindex)는 관리자 레이아웃이 일괄 적용한다
 export const metadata: Metadata = {
-  title: '가격 갱신 리포트',
+  title: '가격 갱신',
 };
 
 type Report = {
@@ -59,16 +59,18 @@ export default function PriceSyncReportPage() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.title}>가격 갱신 리포트</h1>
+        <h1 className={styles.title}>가격 갱신</h1>
         <p className={styles.description}>
-          <code className={styles.code}>npm run price-sync</code> 가 <code className={styles.code}>data/prices.xlsx</code>
-          를 검증한 결과입니다. 반영(ok) 행만 카탈로그에 적용되고, 보류·거부 행은 여기에만 남습니다.
-          업로드와 승인 동작은 서버가 붙는 단계에서 열립니다.
+          비교표(xlsx)를 올리면 브라우저에서 파싱·검증하고, 결과를 승인 대기열에 올립니다.
+          승인하면 반영(ok) 행만 DB 상품에 적용되고 가격 이력이 남습니다. 보류·거부 행은
+          기록에만 남습니다.
         </p>
       </header>
 
+      <PriceSyncQueue />
+
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>실행 정보</h2>
+        <h2 className={styles.sectionTitle}>로컬 파이프라인 마지막 실행 (참고)</h2>
         <dl className={styles.meta}>
           <div className={styles.metaRow}>
             <dt>실행 시각</dt>

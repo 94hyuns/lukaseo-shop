@@ -27,7 +27,7 @@ async function main() {
     process.exit(1);
   }
 
-  const cpuRows = extractCpuRows(fs.readFileSync(inputFile));
+  const cpuRows = await extractCpuRows(fs.readFileSync(inputFile));
 
   const rows: PriceRow[] = [];
   let skipped = 0;

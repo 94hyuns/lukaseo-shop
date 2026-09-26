@@ -1,12 +1,15 @@
-import zlib from 'node:zlib';
-
 /**
  * 한컴 한셀(HCell)이 저장한 "CPU 가성비 비교표"를 읽는 공통 모듈.
  *
  * 한셀 xlsx 는 exceljs·SheetJS 모두 시트 해석에 실패해서 zip·XML 을
- * 직접 파싱한다. 카탈로그 임포트와 가격 갱신 두 스크립트가 같은 파일을
- * 읽으므로, 파싱과 상품명→식별자 규칙을 여기 한 곳에 둔다 —
- * 두 벌로 갈라지면 반드시 어긋난다.
+ * 직접 파싱한다. 카탈로그 임포트와 가격 갱신 두 스크립트, 그리고 관리자
+ * 웹 업로드가 같은 파일을 읽으므로 파싱과 상품명→식별자 규칙을 여기
+ * 한 곳에 둔다 — 두 벌로 갈라지면 반드시 어긋난다.
+ *
+ * Node 전용 API(Buffer, node:zlib)를 쓰지 않는 이유: 이 모듈은 브라우저
+ * (관리자 업로드 화면)에서도 돌아야 한다. 압축 해제는 웹 표준
+ * DecompressionStream 으로 하는데 Node 18+ 에도 전역으로 있어서 스크립트
+ * 쪽도 같은 코드를 쓴다. 그 대가로 extract 계열이 async 가 됐다.
  *
  * 비교표 레이아웃 (2026-08 실물 기준):
  *   1~4행  다층 헤더 (병합 셀 포함)
@@ -14,29 +17,50 @@ import zlib from 'node:zlib';
  *          F=싱글스레드, G=멀티스레드, H=전월가, I=현재가, J=특이사항
  */
 
+const utf8 = new TextDecoder();
+
+async function inflateRaw(data: Uint8Array): Promise<Uint8Array> {
+  const stream = new Blob([data as BlobPart])
+    .stream()
+    .pipeThrough(new DecompressionStream('deflate-raw'));
+  return new Uint8Array(await new Response(stream).arrayBuffer());
+}
+
 /* ── 최소 zip 리더: central directory 에서 항목을 찾아 inflate ── */
-function readZipEntry(buf: Buffer, entryName: string): Buffer {
-  const eocd = buf.lastIndexOf(Buffer.from('PK\x05\x06', 'binary'));
+async function readZipEntry(buf: Uint8Array, entryName: string): Promise<Uint8Array> {
+  const view = new DataView(buf.buffer, buf.byteOffset, buf.byteLength);
+  const u16 = (offset: number) => view.getUint16(offset, true);
+  const u32 = (offset: number) => view.getUint32(offset, true);
+
+  // EOCD 시그니처 PK\x05\x06 을 뒤에서부터 찾는다
+  let eocd = -1;
+  for (let i = buf.length - 22; i >= 0; i--) {
+    if (buf[i] === 0x50 && buf[i + 1] === 0x4b && buf[i + 2] === 0x05 && buf[i + 3] === 0x06) {
+      eocd = i;
+      break;
+    }
+  }
   if (eocd < 0) throw new Error('zip 형식이 아닙니다');
-  const count = buf.readUInt16LE(eocd + 10);
-  let p = buf.readUInt32LE(eocd + 16);
+
+  const count = u16(eocd + 10);
+  let p = u32(eocd + 16);
 
   for (let i = 0; i < count; i++) {
-    if (buf.readUInt32LE(p) !== 0x02014b50) break;
-    const method = buf.readUInt16LE(p + 10);
-    const compSize = buf.readUInt32LE(p + 20);
-    const nameLen = buf.readUInt16LE(p + 28);
-    const extraLen = buf.readUInt16LE(p + 30);
-    const commentLen = buf.readUInt16LE(p + 32);
-    const localOffset = buf.readUInt32LE(p + 42);
-    const name = buf.subarray(p + 46, p + 46 + nameLen).toString();
+    if (u32(p) !== 0x02014b50) break;
+    const method = u16(p + 10);
+    const compSize = u32(p + 20);
+    const nameLen = u16(p + 28);
+    const extraLen = u16(p + 30);
+    const commentLen = u16(p + 32);
+    const localOffset = u32(p + 42);
+    const name = utf8.decode(buf.subarray(p + 46, p + 46 + nameLen));
 
     if (name === entryName) {
-      const lNameLen = buf.readUInt16LE(localOffset + 26);
-      const lExtraLen = buf.readUInt16LE(localOffset + 28);
+      const lNameLen = u16(localOffset + 26);
+      const lExtraLen = u16(localOffset + 28);
       const start = localOffset + 30 + lNameLen + lExtraLen;
       const data = buf.subarray(start, start + compSize);
-      return method === 8 ? zlib.inflateRawSync(data) : Buffer.from(data);
+      return method === 8 ? inflateRaw(data) : data;
     }
     p += 46 + nameLen + extraLen + commentLen;
   }
@@ -85,9 +109,9 @@ function num(value: string | undefined): number | null {
 }
 
 /** 비교표에서 CPU 데이터 행을 뽑는다 */
-export function extractCpuRows(buf: Buffer): CpuRow[] {
-  const strings = parseSharedStrings(readZipEntry(buf, 'xl/sharedStrings.xml').toString());
-  const sheetXml = readZipEntry(buf, 'xl/worksheets/sheet1.xml').toString();
+export async function extractCpuRows(buf: Uint8Array): Promise<CpuRow[]> {
+  const strings = parseSharedStrings(utf8.decode(await readZipEntry(buf, 'xl/sharedStrings.xml')));
+  const sheetXml = utf8.decode(await readZipEntry(buf, 'xl/worksheets/sheet1.xml'));
 
   const rows: CpuRow[] = [];
   for (const [, rowNumText, body] of sheetXml.matchAll(

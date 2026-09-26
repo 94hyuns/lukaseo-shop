@@ -42,7 +42,7 @@ async function main() {
     process.exit(1);
   }
 
-  const rows = extractCpuRows(fs.readFileSync(inputFile));
+  const rows = await extractCpuRows(fs.readFileSync(inputFile));
 
   // 같은 이름이 두 번 나오면 마지막 행을 채택한다 — 가격 갱신 검증(설계 8-3)과
   // 같은 정책이어야 임포트와 갱신의 결과가 어긋나지 않는다

@@ -1,4 +1,15 @@
-import type { Product } from '../shop/types';
+/**
+ * 검증이 상품에서 실제로 보는 필드만 요구한다. 정적 카탈로그(Product)와
+ * DB 조회 결과(관리자 웹 업로드) 둘 다 이 모양을 만족하면 된다.
+ */
+export type CatalogProduct = {
+  sku: string;
+  slug: string;
+  name: string;
+  price: number;
+  salePrice?: number;
+  stock: number;
+};
 
 /**
  * 가격 갱신 검증 (설계문서 8-3).
@@ -60,7 +71,7 @@ function isValidPrice(value: number | null): value is number {
 
 export function validateRows(
   rows: PriceRow[],
-  products: Product[],
+  products: CatalogProduct[],
   changeThreshold: number = DEFAULT_CHANGE_THRESHOLD,
 ): SyncResult {
   const bySku = new Map(products.map((product) => [product.sku, product]));
